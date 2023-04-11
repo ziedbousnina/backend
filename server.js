@@ -9,20 +9,20 @@ const userRoutes = require('./routes/userRoutes.js');
 const profiles = require('./routes/profiles.route');
 const demandeMunicipal = require('./routes/demandeMunicipal.route');
 
+
+const morgan = require('morgan');
+const { forgotPassword, resetPassword } = require('./controllers/userController');
+const { isResetTokenValid } = require('./security/Rolemiddleware');
+const passport = require('passport');
+const governoratesModel = require('./models/governorates.model');
+const app = express();
+
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   next();
 });
-const morgan = require('morgan');
-const { forgotPassword, resetPassword } = require('./controllers/userController');
-const { isResetTokenValid } = require('./security/Rolemiddleware');
-const passport = require('passport');
-const governoratesModel = require('./models/governorates.model');
-
-const app = express();
-
 // passport
 app.use(passport.initialize())
 require('./security/passport')(passport)
