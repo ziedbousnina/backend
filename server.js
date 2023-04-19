@@ -8,6 +8,7 @@ require('dotenv').config();
 const userRoutes = require('./routes/userRoutes.js');
 const profiles = require('./routes/profiles.route');
 const demandeMunicipal = require('./routes/demandeMunicipal.route');
+const binRoute = require('./routes/bin.route');
 
 
 const morgan = require('morgan');
@@ -15,6 +16,7 @@ const { forgotPassword, resetPassword } = require('./controllers/userController'
 const { isResetTokenValid } = require('./security/Rolemiddleware');
 const passport = require('passport');
 const governoratesModel = require('./models/governorates.model');
+const access = require('./routes/access.route');
 const app = express();
 
 app.use((req, res, next) => {
@@ -41,12 +43,15 @@ app.use(express.urlencoded({extended: false}));
 // app.use(express.json({limit: '50mb'}));
 // app.use(express.urlencoded({limit: '50mb'}));
 
+
 app.post("/forgot-password", forgotPassword )
 // router.post("/reset-password", resetPassword )
 app.post("/reset-password",isResetTokenValid,  resetPassword )
 app.use('/api/users', userRoutes);
 
 app.use('/api/profile', profiles);
+app.use('/api/access', access);
+app.use('/api/bin', binRoute);
 app.use('/api/demande-municipal', demandeMunicipal);
 app.get('/api/governorates', (req, res)=>{
   governoratesModel.find()

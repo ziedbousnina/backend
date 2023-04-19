@@ -19,8 +19,9 @@ const multer = require('multer')
 const { google } = require('googleapis');
 const { OAuth2 } = google.auth;
 const { OAuth2Client } = require('google-auth-library');
+const Access = require('../models/access.model.js');
 
-
+const accessModel = require("../models/access.model");
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -68,6 +69,66 @@ const authUser = async (req, res) => {
       responseSent = true;
       return res.status(404).json(errors);
     }
+  } catch (error) {
+    if (!responseSent) {
+      responseSent = true;
+      console.log(error);
+      console.log("hi")
+      return res.status(500).json({success:false, message: "error" });
+    }
+  }
+  
+}
+
+const addAccessCode = async(req, res)=> {
+  const {code} = req.body
+  const {_id} = req.user
+  
+  console.log("code")
+  try {
+   
+      const access = await accessModel.findOne({ code: code });
+      if(!access) {
+        return res.status(404).json({success:false, message: "code not found" });
+      }
+
+      const user = await User.findById(_id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+     // Check if access._id is already in the user's accessListBins array
+     const accessId = access._id.toString();
+     if (user.accessListBins.includes(accessId)) {
+       return res.status(400).json({ success: false, message: "Access code already added" });
+     }
+    user.accessListBins.push(access._id);
+    await user.save();
+
+
+      
+    res.status(200).json({ success: true, message: "Access added successfully" });
+
+     
+   
+  } catch (error) {
+    if (!responseSent) {
+      responseSent = true;
+      console.log(error);
+      console.log("hi")
+      return res.status(500).json({success:false, message: "error" });
+    }
+  }
+}
+
+const getCurrentAccessList = async(req, res)=> {
+  const {_id} = req.user
+  try {
+    const user = await User.findById(_id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    const accessList = await accessModel.find({ _id: { $in: user.accessListBins } }).populate('company');
+    res.status(200).json({ success: true, accessList });
   } catch (error) {
     if (!responseSent) {
       responseSent = true;
@@ -719,10 +780,11 @@ module.exports = {
   resetPassword,
   registerGoogleUser,
   
-
+  getCurrentAccessList,
   verifyEmail,
   forgotPassword,
   resendOTP,
   resendOTPDeleteAccount,
-  DeleteAccount
+  DeleteAccount,
+  addAccessCode
 }

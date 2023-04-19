@@ -21,9 +21,11 @@ const {
   getUserByEmail,
   registerGoogleUser,
   resendOTPDeleteAccount,
-  DeleteAccount
+  DeleteAccount,
+  addAccessCode,
+  getCurrentAccessList
 } = require('../controllers/userController');
-
+const passport = require('passport');
 const protect = require('../middleware/authMiddleware.js')
 
 router.route('/').post(registerUser)
@@ -44,6 +46,9 @@ router.route("/resendotp").post( resendOTP )
 router.route("/resendOTPDeleteAccount").post( resendOTPDeleteAccount )
 // router.post("/reset-password", resetPassword )
 router.post("/reset-password",isResetTokenValid,  resetPassword )
+// router.get("/addAccessCode",  addAccessCode )
+router.route("/access/addAccess").put(passport.authenticate('jwt', {session: false}),addAccessCode)
+router.route("/access/getCurrentAccessList").get(passport.authenticate('jwt', {session: false}),getCurrentAccessList)
 router.get("/verify-token", isResetTokenValid, (req, res)=> {
   res.json({success:true})
 })

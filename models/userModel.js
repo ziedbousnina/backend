@@ -31,14 +31,11 @@ const userSchema = mongoose.Schema(
         accessListBins : [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'AccessListBins'
+                ref: 'Access',
+                unique: true,
             }
         ],
-        ListOfBins : {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'AccessListBins'
-
-        }
+        
     },{
         timestamps: true
     }
