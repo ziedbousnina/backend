@@ -153,7 +153,7 @@ const getCurentAccess = async(req, res)=> {
   const {_id} = req.user
   console.log(_id)
   try {
-    const access = await accessModel.findOne({company:_id});
+    const access = await accessModel.findOne({company:_id}).populate('bins');
     if (!access) {
       return res.status(404).json({
         message: 'Access not found'
