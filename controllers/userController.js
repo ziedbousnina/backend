@@ -35,7 +35,9 @@ const authUser = async (req, res) => {
     if (isValid) {
       const user = await User.findOne({ email: req.body.email });
       if (user && user.googleId) {
-                return res.status(400).json({ success: false, message: "Cannot login with email and password. Please use Google Sign In." });
+        errors.email = "Cannot login with email and password. Please use Google Sign In.";
+        responseSent = true;
+                return res.status(400).json(errors);
               }
         
       console.log(user)
