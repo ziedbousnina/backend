@@ -3,24 +3,37 @@ const userModel = require("../models/userModel");
 
 
 
+// const CreateAccess = async (req, res) => {
+//   try {
+//     const { companyId } = req.body
 
+//     // Check if the company exists
+//     const companyExists = await userModel.findById(companyId)
+//     if (!companyExists) {
+//       return res.status(404).json({ message: 'Company not found' })
+//     }
+
+//     // Create a new access record
+//     const access = new accessModel({ company: companyId })
+//     await access.save()
+
+//     return res.status(201).json({ access })
+//   } catch (error) {
+//     console.error(error)
+//     return res.status(500).json({ message: 'Server error' })
+//   }
+// }
 const CreateAccess = async (req, res) => {
   try {
     const { companyId } = req.body;
 
     const existingAccess = await accessModel.findOne({ company: companyId });
+    console.log(existingAccess)
     if (existingAccess) {
       return res.status(400).json({
         message: 'Access record with this company already exists',
       });
     }
-
-    // const existingBins = await accessModel.find({ bins: { $in: bins } });
-    // if (existingBins.length > 0) {
-    //   return res.status(400).json({
-    //     message: 'One or more bins already assigned to another company',
-    //   });
-    // }
 
    const bins =  [];
 

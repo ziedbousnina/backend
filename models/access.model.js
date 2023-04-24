@@ -14,7 +14,7 @@ const accessSchema = mongoose.Schema(
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Bin',
-                unique: true,
+                // unique: true,
                 // required: false,
                 
             }
@@ -22,7 +22,7 @@ const accessSchema = mongoose.Schema(
         code: {
             type: Number,
             // required: true,
-            unique: true,
+            // unique: true,
         },
 
 
