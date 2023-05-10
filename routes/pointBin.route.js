@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const { ROLES, isRole } = require('../security/Rolemiddleware');
 
-const { CreatePointBin, getAllPointBins, AddBinToPointBin } = require('../controllers/pointBin.controller');
+const { CreatePointBin, getAllPointBins, AddBinToPointBin } = require('../controllers/PointBin.controller');
 
 const router = express.Router()
 
