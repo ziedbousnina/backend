@@ -65,7 +65,7 @@ const findDemandeInProgressMunicipal = async(req, res)=>{
   try {
     const data = await cleaningSerciceModel.find({
       municipalAccept: "in progress",
-      AdminAccept: "valid",
+      // AdminAccept: "valid",
     })
     .populate('user', ['name', 'email', 'role'])
     .sort({ createdAt: 'desc' }) // Sort by date in ascending order
@@ -78,7 +78,26 @@ const findDemandeInProgressMunicipal = async(req, res)=>{
  }
 }
 
+const AcceptCleaningRequestMunicipal = async (req, res) => {
+  const demandeId = req.params.id; // Get the ID of the demand from the request parameters
+  // const { status } = req.body; // Get the new status from the request body
 
+  try {
+    // Check if the demand exists
+    const demande = await cleaningSerciceModel.findById(demandeId);
+    if (!demande) {
+      return res.status(404).json({ message: "Demand not found" });
+    }
+
+    // Update the status and save the demand
+    demande.municipalAccept = "valid";
+    const updatedDemande = await demande.save();
+
+    res.status(200).json({ data: updatedDemande, success: true });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 const findAllDemande = async(req, res)=>{
   // res.status(200).json("data")
@@ -150,5 +169,6 @@ module.exports = {
   AcceptDemande,
   findSingleCleaningService,
   findDemandeInProgressMunicipal,
-  DeleteRequest
+  DeleteRequest,
+  AcceptCleaningRequestMunicipal
 };
