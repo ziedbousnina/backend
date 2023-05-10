@@ -7,70 +7,19 @@ const cleaningService = require("../validation/cleaningService");
 
 const cloudinary = require('../utils/uploadImage')
 
-// const AddCleaningService = async (req, res) => {
-//   const { isValid, errors } = cleaningService(req.body);
-//   console.log(req.body);
-  
-//   try {
-//     if (!isValid) {
-//       res.status(404).json(errors);
-//     } else {
-//       const demandeMunicipal = await cleaningSerciceModel.findOne({
-//         user: req.user.id,
-//       });
-//       if (!demandeMunicipal) {
-//         const telExist = await cleaningSerciceModel.findOne({ tel: req.body.tel });
-//         if (telExist) {
-//           errors.tel = "tel already exist";
-//           res.status(404).json(errors);
-//         } else {
-//           req.body.user = req.user.id;
-//           req.body.status="in progress"
-//           const data = await cleaningSerciceModel.create(req.body);
-//           res.status(200).json({ data, success: true });
-//         }
-//       } else {
-//         if (demandeMunicipal.tel !== req.body.tel) {
-//           const telExist = await cleaningSerciceModel.findOne({ tel: req.body.tel });
-//           if (telExist) {
-//             errors.tel = "tel already exist";
-//             res.status(404).json(errors);
-//           } else {
-//             const result = await cleaningSerciceModel.findOneAndUpdate(
-//               { user: req.user.id },
-//               req.body,
-//               { new: true }
-//             );
-//             var tel = result.tel;
-//             res.status(200).json(result);
-//           }
-//         } else {
-//           const result = await cleaningSerciceModel.findOneAndUpdate(
-//             { user: req.user.id },
-//             req.body,
-//             { new: true }
-//           );
-//           var tel = result.tel;
-//           res.status(200).json(result);
-//         }
-//       }
-//     }
-//   } catch (error) {
-//     res.status(500).json({ message1: "error2", message: error.message });
-//   }
-// };
 
 const AddCleaningService = async (req, res) => {
 console.log(req.body)
 console.log(req.user)
+console.log(req.files.image.path)
   const { isValid, errors } = cleaningService(req.body);
 
   try {
     if (!isValid) {
       res.status(404).json(errors);
     } else {
-      if(req.files?.avatar?.size > 0){
-        const result = await cloudinary.uploader.upload(req.files.avatar.path, {
+      if(req.files?.image?.size > 0){
+        const result = await cloudinary.uploader.upload(req.files.image.path, {
             public_id: `${req.user.id}_profile`,
             width: 500,
             height: 500,
@@ -177,6 +126,22 @@ const AcceptDemande = async (req, res) => {
   }
 };
 
+const DeleteRequest = async (req, res) => {
+  const { requestId } = req.params;
+  console.log(requestId)
+
+
+  if (!requestId) {
+    return res.status(400).json({ message: "requestId is required" });
+  }
+
+  try {
+    const data = await cleaningSerciceModel.findByIdAndDelete(requestId);
+    res.status(200).json({ message: "request deleted" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   AddCleaningService,
@@ -184,5 +149,6 @@ module.exports = {
   findAllDemande,
   AcceptDemande,
   findSingleCleaningService,
-  findDemandeInProgressMunicipal
+  findDemandeInProgressMunicipal,
+  DeleteRequest
 };
