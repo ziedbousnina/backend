@@ -693,7 +693,25 @@ const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find({})
   res.json(users)
 })
+const getUsersCount = async (req, res) => {
+  const usersCount = await User.aggregate([
+    {
+      $group: {
+        _id: '$role',
+        count: { $sum: 1 }
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        role: '$_id',
+        count: 1
+      }
+    }
+  ]);
 
+  res.json(usersCount);
+};
 // @desc    Delete user
 // @route   DELETE /api/users/:id
 // @access  Private/Admin
@@ -788,5 +806,6 @@ module.exports = {
   resendOTP,
   resendOTPDeleteAccount,
   DeleteAccount,
-  addAccessCode
+  addAccessCode,
+  getUsersCount
 }

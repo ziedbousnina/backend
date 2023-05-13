@@ -23,18 +23,16 @@ const {
   resendOTPDeleteAccount,
   DeleteAccount,
   addAccessCode,
-  getCurrentAccessList
+  getCurrentAccessList,
+  getUsersCount
 } = require('../controllers/userController');
 const passport = require('passport');
 const protect = require('../middleware/authMiddleware.js')
 
 router.route('/').post(registerUser)
 router.route('/login').post(authUser)
+router.route("/getUserCounts").get(getUsersCount)
 
-router
-  .route('/:id')
-//   .delete(protect, deleteUser)
-  .get(getUserById)
 
   router.route('/getUserByEmail/:email').get(getUserByEmail)
   router.route('/registerGoogleUser').post(registerGoogleUser)
@@ -55,6 +53,10 @@ router.get("/verify-token", isResetTokenValid, (req, res)=> {
 
 router.route('/profile/password/reset').post(protect ,resetPassword);
 
+router
+  .route('/:id')
+//   .delete(protect, deleteUser)
+  .get(getUserById)
 
 
 module.exports = router
