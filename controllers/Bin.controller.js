@@ -52,9 +52,30 @@ const getAllBins = async (req, res)=> {
   }
 }
 
+const getBinsCount = async (req, res) => {
+  const currentDate = new Date();
+  const lastDayDate = new Date();
+  lastDayDate.setDate(currentDate.getDate() - 1);
+
+  const currentDayBinsCount = await binsModel.countDocuments({
+    createdAt: { $gte: lastDayDate, $lt: currentDate }
+  });
+
+  const totalBinsCount = await binsModel.countDocuments({});
+
+  const percentageIncrease = totalBinsCount ? ((currentDayBinsCount - totalBinsCount) / totalBinsCount) * 100 : 0;
+
+  res.json({
+    currentDayCount: currentDayBinsCount,
+    totalCount: totalBinsCount,
+    percentageIncrease
+  });
+};
+
 module.exports = 
 {
 
   CreateBin,
   getAllBins,
+  getBinsCount
 }
