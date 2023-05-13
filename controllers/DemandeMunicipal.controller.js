@@ -75,6 +75,17 @@ const findDemandeInProgress = async(req, res)=>{
  }
 }
 
+// const findAllDemande = async (req, res) => {
+//   try {
+//     const data = await DemandeMunicipalModel.find({}).populate('user', ['name', 'email', 'role'])
+//       .sort({ _id: -1 });
+
+//     const filteredData = data.filter(demande => demande.status === 'in progress');
+//     res.status(200).json({ ...filteredData });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
 
 const findAllDemande = async(req, res)=>{
@@ -89,6 +100,18 @@ const findAllDemande = async(req, res)=>{
      
  }
 }
+
+// const findAllDemande = async (req, res) => {
+//   try {
+//     const data = await DemandeMunicipalModel.find({ status: 'in progress' })
+//       .populate('user', ['name', 'email', 'role'])
+//       .sort({ createdAt: 1 }); // Sort in ascending order by time
+
+//     res.status(200).json({ ...data });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 const findSingleRequest = async(req, res)=>{
   var userId = req.query.id;
   

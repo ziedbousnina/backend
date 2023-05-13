@@ -772,25 +772,7 @@ const getUsersCount = async (req, res) => {
   });
 };
 
-const getBinsCount = async(req, res)=>{
-  const binsCount = await Bin.aggregate([
-    {
-      $group: {
-        _id: '$status',
-        count: { $sum: 1 }
-      }
-    },
-    {
-      $project: {
-        _id: 0,
-        status: '$_id',
-        count: 1
-      }
-    }
-  ]);
 
-  res.json(binsCount);
-}
 
 // @desc    Delete user
 // @route   DELETE /api/users/:id
@@ -888,5 +870,5 @@ module.exports = {
   DeleteAccount,
   addAccessCode,
   getUsersCount,
-  getBinsCount
+
 }
