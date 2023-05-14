@@ -20,7 +20,7 @@ const { google } = require('googleapis');
 const { OAuth2 } = google.auth;
 const { OAuth2Client } = require('google-auth-library');
 const Access = require('../models/access.model.js');
-
+const profileModels = require("../models/profile.models")
 const accessModel = require("../models/access.model");
 
 // @desc    Auth user & get token
@@ -689,8 +689,13 @@ const resetPassword = async (req, res) => {
 // @desc    Get all users
 // @route   GET /api/users
 // @access  Private/Admin
+// const getUsers = asyncHandler(async (req, res) => {
+//   const users = await User.find({})
+//   res.json(users)
+// })
+
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({})
+  const users = await profileModels.find({}).populate('user')
   res.json(users)
 })
 // const getUsersCount = async (req, res) => {

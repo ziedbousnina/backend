@@ -34,6 +34,7 @@ router.route('/login').post(authUser)
 router.route("/getUserCounts").get(getUsersCount)
 
 
+router.route('/getUsers').get(getUsers)
   router.route('/getUserByEmail/:email').get(getUserByEmail)
   router.route('/registerGoogleUser').post(registerGoogleUser)
 //   .put(protect, updateUser)
