@@ -19,14 +19,17 @@ const QuoteModel = new Schema({
   },
   companyName: {
     type:String,
+    required:true,
 
   },
   companyWebSite: {
     type:String,
+    required:true,
 
   },
   jobTitle: {
     type:String,
+    required:true,
 
   },
   country: {
@@ -38,11 +41,12 @@ const QuoteModel = new Schema({
     required:true,
   },
   size: {
-    type:Number,
+    type:String,
     required:true,
   },
   quantity : {
-    type:Number,
+    type:String,
+    required:true,
 
   },
   powerSupply : {
@@ -53,10 +57,12 @@ const QuoteModel = new Schema({
     type:String,
     required:true,
   },
-  disinfection : {
-    type:String,
-    required:true,
-  },
+  disinfection : [
+    {
+      type:String,
+      required:true,
+    },
+  ],
   sensors: [
     {
       type:String,
@@ -65,6 +71,7 @@ const QuoteModel = new Schema({
   ],
   graphicWraps : {
     type:String,
+
   },
   advertisementSignage: {
     type:String,

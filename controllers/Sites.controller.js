@@ -1,8 +1,10 @@
 const partnershipModel = require("../models/partnership.model");
 const validatePartnershipInput = require('../validation/partnership')
 const validateContactUsInput = require('../validation/ContactUsValidation');
+const validateQuoteInput = require('../validation/QuoteValidation');
 const ContactUsModel = require("../models/ContactUs.model");
-
+const QuoteModel = require("../models/Quote.model");
+const cloudinary = require('../utils/uploadImage')
 
 const Addpartnership = async (req, res) => {
 
@@ -231,9 +233,54 @@ const MarkASReadedContactUs = async (req, res) => {
 };
 
 
-const createQuote = async(req, res)=>{
-  
-}
+const createQuote = async (req, res) => {
+  const {errors, isValid} = validateQuoteInput(req.body)
+
+  const {graphicWraps,advertisementSignage } =req.files
+
+  console.log(req.body)
+    try {
+      
+      if (isValid) {
+
+        if(graphicWraps){
+     
+          const result = await cloudinary.uploader.upload(graphicWraps.path, {
+            resource_type: 'auto', // Automatically detect resource type (in this case, PDF)
+            folder: 'pdf_uploads', // Optional: specify a folder in Cloudinary to store PDFs
+            public_id: `profile_${Date.now()}`,
+            overwrite: true,
+          });
+          console.log(result)
+          req.body.graphicWraps = result.secure_url
+        }
+        if(advertisementSignage){
+     
+          const result = await cloudinary.uploader.upload(advertisementSignage.path, {
+            resource_type: 'auto', // Automatically detect resource type (in this case, PDF)
+            folder: 'pdf_uploads', // Optional: specify a folder in Cloudinary to store PDFs
+            public_id: `profile_${Date.now()}`,
+            overwrite: true,
+          });
+          console.log(result)
+          req.body.advertisementSignage = result.secure_url
+        }
+        
+
+        console.log("before save")
+        const newQuote = await QuoteModel.create(req.body);
+    
+    console.log("after save")
+    res.status(201).json(newQuote);
+  }else {
+    responseSent = true;
+    return res.status(404).json(errors);
+  }
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create quote' });
+  }
+};
+
 
 
 
@@ -248,7 +295,8 @@ module.exports =
   createContactUS,
   FetchAllContactUs,
   FetchContactById,
-  MarkASReadedContactUs
+  MarkASReadedContactUs,
+  createQuote
  
   
 }
