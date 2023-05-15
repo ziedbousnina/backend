@@ -82,6 +82,24 @@ const FetchAllPartnership = async (req, res) => {
     });
   }
 };
+
+const FetchPartnershipById = async (req, res) => {
+  try {
+    const partnerships = await partnershipModel.find();
+    res.status(200).json({
+      success: true,
+      message: 'Partnerships fetched successfully',
+      partnerships
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch partnerships',
+      error: error.message
+    });
+  }
+};
+
 const FetchPartnerShipById = async (req, res) => {
   try {
     const partnershipId = req.params.id; // Assuming the ID is passed as a route parameter
