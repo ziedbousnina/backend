@@ -871,6 +871,31 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 })
 
+const blockUser = async(req, res)=>  {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (user) {
+    user.isBlocked = true;
+    await user.save();
+    res.json({ message: 'User blocked' });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+}
+const deblockUser = async(req, res)=>  {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (user) {
+    user.isBlocked = false;
+    await user.save();
+    res.json({ message: 'User deblocked' });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+}
+
 
 
 
@@ -893,6 +918,8 @@ module.exports = {
   DeleteAccount,
   addAccessCode,
   getUsersCount,
-  getAllUserDetailsById
+  getAllUserDetailsById,
+  blockUser,
+  deblockUser
 
 }

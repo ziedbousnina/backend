@@ -28,6 +28,10 @@ const userSchema = mongoose.Schema(
         avatar: String,
         activeToken: String,
         activeExpires: Date,
+        isBlocked:{
+            type: Boolean,
+            default: false,
+        },
         accessListBins : [
             {
                 type: mongoose.Schema.Types.ObjectId,

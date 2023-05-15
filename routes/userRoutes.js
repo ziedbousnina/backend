@@ -26,7 +26,9 @@ const {
   getCurrentAccessList,
   getUsersCount,
   getAllUserDetails,
-  getAllUserDetailsById
+  getAllUserDetailsById,
+  blockUser,
+  deblockUser
 } = require('../controllers/userController');
 const passport = require('passport');
 const protect = require('../middleware/authMiddleware.js')
@@ -55,6 +57,8 @@ router.get("/verify-token", isResetTokenValid, (req, res)=> {
 })
 
 router.route('/profile/password/reset').post(protect ,resetPassword);
+router.route('/block/:id').put(blockUser);
+router.route('/deblock/:id').put(deblockUser);
 
 router
   .route('/:id')
