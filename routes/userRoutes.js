@@ -24,7 +24,9 @@ const {
   DeleteAccount,
   addAccessCode,
   getCurrentAccessList,
-  getUsersCount
+  getUsersCount,
+  getAllUserDetails,
+  getAllUserDetailsById
 } = require('../controllers/userController');
 const passport = require('passport');
 const protect = require('../middleware/authMiddleware.js')
@@ -57,7 +59,7 @@ router.route('/profile/password/reset').post(protect ,resetPassword);
 router
   .route('/:id')
 //   .delete(protect, deleteUser)
-  .get(getUserById)
+  .get(getAllUserDetailsById)
 
 
 module.exports = router

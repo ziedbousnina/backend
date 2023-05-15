@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler')
 const generateToken = require('../utils/generateToken.js')
 const User = require('../models/userModel.js')
+const cleaningModel = require('../models/cleaningSercice.model.js')
 var crypto = require('crypto');
 var mailer = require('../utils/mailer');
 const { generateOtp,verifyOtp } = require('../utils/otp.js');
@@ -807,6 +808,23 @@ const getUserById = asyncHandler(async (req, res) => {
     throw new Error('User not found')
   }
 })
+const getAllUserDetailsById = async (req, res) => {
+  try {
+    const userId = req?.params?.id;
+    if (!userId) {
+      throw new Error('Invalid user ID');
+    }
+
+    const cleaningServiced = await cleaningModel.find({ user: userId }) || {};
+    const profile = await profileModels.find({ user: userId }).populate('user') || {};
+    const users = await User.findById(userId).populate('accessListBins') || {};
+
+    res.json({ users, profile, cleaningServiced });
+  } catch (error) {
+    // Handle the error
+    res.status(404).json({ error: 'User not found' });
+  }
+};
 
 
 // @desc    Get user by Email
@@ -875,5 +893,6 @@ module.exports = {
   DeleteAccount,
   addAccessCode,
   getUsersCount,
+  getAllUserDetailsById
 
 }
