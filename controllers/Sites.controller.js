@@ -2,9 +2,11 @@ const partnershipModel = require("../models/partnership.model");
 const validatePartnershipInput = require('../validation/partnership')
 const validateContactUsInput = require('../validation/ContactUsValidation');
 const validateQuoteInput = require('../validation/QuoteValidation');
+const validateTechnicalAssistanceInput = require('../validation/TechAssistValidation');
 const ContactUsModel = require("../models/ContactUs.model");
 const QuoteModel = require("../models/Quote.model");
-const cloudinary = require('../utils/uploadImage')
+const cloudinary = require('../utils/uploadImage');
+const TechnicalAssistanceModal = require("../models/TechnicalAssistance.modal");
 
 const Addpartnership = async (req, res) => {
 
@@ -281,6 +283,43 @@ const createQuote = async (req, res) => {
   }
 };
 
+const createTechAssistance = async (req, res) => {
+  const {errors, isValid} = validateTechnicalAssistanceInput(req.body)
+
+  const {attachment } =req.files
+  console.log(attachment)
+
+  console.log(req.body)
+    try {
+      
+      if (isValid) {
+
+        if(attachment){
+     
+          const result = await cloudinary.uploader.upload(attachment.path, {
+            resource_type: 'auto', // Automatically detect resource type (in this case, PDF)
+            folder: 'pdf_uploads', // Optional: specify a folder in Cloudinary to store PDFs
+            public_id: `profile_${Date.now()}`,
+            overwrite: true,
+          });
+          console.log(result)
+          req.body.attachment = result.secure_url
+        }
+       
+
+        console.log("before save")
+        const newTechAssist = await TechnicalAssistanceModal.create(req.body);
+    
+    console.log("after save")
+    res.status(201).json(newTechAssist);
+  }else {
+    responseSent = true;
+    return res.status(404).json(errors);
+  }
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create TechAssist' });
+  }
+};
 
 
 
@@ -296,7 +335,8 @@ module.exports =
   FetchAllContactUs,
   FetchContactById,
   MarkASReadedContactUs,
-  createQuote
+  createQuote,
+  createTechAssistance
  
   
 }
