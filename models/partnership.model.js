@@ -63,7 +63,7 @@ const partnershipModel = new Schema({
   },
   status: {
     type:String,
-    default: 'in progress',
+    default: 'unreaded',
   }
 },
    {timestamps:true}
