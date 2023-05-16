@@ -2,7 +2,7 @@ const express = require('express');
 
 
 
-const { Addpartnership, FetchAll, FetchAllPartnership, FetchPartnerShipById, AcceptPartnerShip, createContactUS, FetchAllContactUs, FetchContactById, MarkASReadedContactUs, createQuote, createTechAssistance, MarkASReadedPartnerShip } = require('../controllers/Sites.controller');
+const { Addpartnership, FetchAll, FetchAllPartnership, FetchPartnerShipById, AcceptPartnerShip, createContactUS, FetchAllContactUs, FetchContactById, MarkASReadedContactUs, createQuote, createTechAssistance, MarkASReadedPartnerShip, FetchAllQuote, FetchQuoteById } = require('../controllers/Sites.controller');
 
 
 const router = express.Router()
@@ -13,8 +13,10 @@ router.route('/AddContactUs').post( createContactUS )
 router.route('/createQuote').post( createQuote )
 router.route('/createTechAssist').post( createTechAssistance )
 router.route('/partnerShip/fetchAll').get( FetchAllPartnership )
+router.route('/quote/fetchAll').get( FetchAllQuote )
 router.route('/contactUs/fetchAll').get( FetchAllContactUs )
 router.route('/contactUs/readed/:id').put( MarkASReadedContactUs )
+router.route('/quote/fetchByID/:id').get( FetchQuoteById )
 router.route('/partnerShip/readed/:id').put( MarkASReadedPartnerShip )
 
 

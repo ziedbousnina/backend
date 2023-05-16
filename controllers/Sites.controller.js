@@ -65,7 +65,6 @@ const Addpartnership = async (req, res) => {
   }
 };
 
-
 const FetchAllPartnership = async (req, res) => {
   try {
     const partnerships = await partnershipModel.find();
@@ -82,7 +81,6 @@ const FetchAllPartnership = async (req, res) => {
     });
   }
 };
-
 
 const FetchPartnerShipById = async (req, res) => {
   try {
@@ -162,6 +160,7 @@ const createContactUS = async (req, res) => {
     res.status(500).json({ message: 'Failed to create contact', error: error.message });
   }
 }
+
 const FetchAllContactUs = async (req, res) => {
   try {
     const partnerships = await ContactUsModel.find();
@@ -352,6 +351,49 @@ const createTechAssistance = async (req, res) => {
   }
 };
 
+const FetchAllQuote = async (req, res) => {
+  try {
+    const quotes = await QuoteModel.find();
+    res.status(200).json({
+      success: true,
+      message: 'quotes fetched successfully',
+      quotes
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch quotes',
+      error: error.message
+    });
+  }
+};
+
+const FetchQuoteById = async (req, res) => {
+  try {
+    const QuoteId = req.params.id; // Assuming the ID is passed as a route parameter
+    
+    const quote = await QuoteModel.findById(QuoteId);
+    
+    if (!quote) {
+      return res.status(404).json({
+        success: false,
+        message: 'quote not found'
+      });
+    }
+    
+    res.status(200).json({
+      success: true,
+      message: 'quote fetched successfully',
+      quote
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch quote',
+      error: error.message
+    });
+  }
+};
 
 
 
@@ -368,7 +410,9 @@ module.exports =
   MarkASReadedContactUs,
   createQuote,
   createTechAssistance,
-  MarkASReadedPartnerShip
+  MarkASReadedPartnerShip,
+  FetchAllQuote,
+  FetchQuoteById
  
   
 }
