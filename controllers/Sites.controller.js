@@ -218,7 +218,7 @@ const MarkASReadedContactUs = async (req, res) => {
       });
     }
     
-    contactUS.status = 'readed'; // Updating the status to 'valid'
+    contactUS.status === 'readed' ? contactUS.status = 'unreaded' : contactUS.status = 'readed';  // Updating the status to 'valid'
     const updatedContact = await contactUS.save();
     
     res.status(200).json({
