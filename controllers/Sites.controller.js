@@ -395,6 +395,36 @@ const FetchQuoteById = async (req, res) => {
   }
 };
 
+const MarkASReadedQuote = async (req, res) => {
+  // console.log("quote update")
+  try {
+    const PartnerId = req.params.id; // Assuming the ID is passed as a route parameter
+    
+    const Quote = await QuoteModel.findById(PartnerId);
+    
+    if (!Quote) {
+      return res.status(404).json({
+        success: false,
+        message: 'Quote not found'
+      });
+    }
+    
+    Quote.status === 'readed' ? Quote.status = 'unreaded' : Quote.status = 'readed'; // Updating the status to 'valid'
+    const updatedQuote = await Quote.save();
+    
+    res.status(200).json({
+      success: true,
+      message: 'Quote status updated successfully',
+      Quote: updatedQuote
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update Quote status',
+      error: error.message
+    });
+  }
+};
 
 
 module.exports = 
@@ -412,7 +442,8 @@ module.exports =
   createTechAssistance,
   MarkASReadedPartnerShip,
   FetchAllQuote,
-  FetchQuoteById
+  FetchQuoteById,
+  MarkASReadedQuote
  
   
 }
