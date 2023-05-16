@@ -163,11 +163,11 @@ const createContactUS = async (req, res) => {
 
 const FetchAllContactUs = async (req, res) => {
   try {
-    const partnerships = await ContactUsModel.find();
+    const Contacts = await ContactUsModel.find();
     res.status(200).json({
       success: true,
       message: 'Contact Us fetched successfully',
-      partnerships
+      Contacts
     });
   } catch (error) {
     res.status(500).json({
