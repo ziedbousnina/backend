@@ -426,6 +426,79 @@ const MarkASReadedQuote = async (req, res) => {
   }
 };
 
+const FetchTechAssist = async (req, res) => {
+  try {
+    const techAssist = await TechnicalAssistanceModal.find();
+    res.status(200).json({
+      success: true,
+      message: 'techAssist fetched successfully',
+      techAssist
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch techAssist',
+      error: error.message
+    });
+  }
+};
+const FetchTechAssistById = async (req, res) => {
+  try {
+    const TechId = req.params.id; // Assuming the ID is passed as a route parameter
+    
+    const TechAssist = await TechnicalAssistanceModal.findById(TechId);
+    
+    if (!TechAssist) {
+      return res.status(404).json({
+        success: false,
+        message: 'TechAssist not found'
+      });
+    }
+    
+    res.status(200).json({
+      success: true,
+      message: 'TechAssist fetched successfully',
+      TechAssist
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch TechAssist',
+      error: error.message
+    });
+  }
+};
+
+const MarkASReadedTechAssist = async (req, res) => {
+  // console.log("quote update")
+  try {
+    const TechAssistId = req.params.id; // Assuming the ID is passed as a route parameter
+    
+    const TechAssist = await TechnicalAssistanceModal.findById(TechAssistId);
+    
+    if (!TechAssist) {
+      return res.status(404).json({
+        success: false,
+        message: 'TechAssist not found'
+      });
+    }
+    
+    TechAssist.status === 'readed' ? TechAssist.status = 'unreaded' : TechAssist.status = 'readed'; // Updating the status to 'valid'
+    const updatedTechAssist = await TechAssist.save();
+    
+    res.status(200).json({
+      success: true,
+      message: 'TechAssist status updated successfully',
+      TechAssist: updatedTechAssist
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update Quote status',
+      error: error.message
+    });
+  }
+};
 
 module.exports = 
 {
@@ -443,7 +516,10 @@ module.exports =
   MarkASReadedPartnerShip,
   FetchAllQuote,
   FetchQuoteById,
-  MarkASReadedQuote
+  MarkASReadedQuote,
+  FetchTechAssist,
+  FetchTechAssistById,
+  MarkASReadedTechAssist
  
   
 }
