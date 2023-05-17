@@ -28,7 +28,8 @@ const {
   getAllUserDetails,
   getAllUserDetailsById,
   blockUser,
-  deblockUser
+  deblockUser,
+  getAllUserWhoHasASameAccessBin
 } = require('../controllers/userController');
 const passport = require('passport');
 const protect = require('../middleware/authMiddleware.js')
@@ -52,6 +53,7 @@ router.post("/reset-password",isResetTokenValid,  resetPassword )
 // router.get("/addAccessCode",  addAccessCode )
 router.route("/access/addAccess").put(passport.authenticate('jwt', {session: false}),addAccessCode)
 router.route("/access/getCurrentAccessList").get(passport.authenticate('jwt', {session: false}),getCurrentAccessList)
+router.route("/access/getAllUserWhoHasASameAccessBin").get(passport.authenticate('jwt', {session: false}),getAllUserWhoHasASameAccessBin)
 router.get("/verify-token", isResetTokenValid, (req, res)=> {
   res.json({success:true})
 })

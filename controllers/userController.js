@@ -896,6 +896,17 @@ const deblockUser = async(req, res)=>  {
   }
 }
 
+const getAllUserWhoHasASameAccessBin = async(req, res)=> {
+  const {_id} = req.user
+ 
+  const currentUser = await User.findById(_id)
+ 
+  const users = await User.find({accessListBins: {$in: currentUser.accessListBins}, _id: {$ne: currentUser._id}})
+ 
+  res.json(users)
+ }
+
+
 
 
 
@@ -920,6 +931,7 @@ module.exports = {
   getUsersCount,
   getAllUserDetailsById,
   blockUser,
-  deblockUser
+  deblockUser,
+  getAllUserWhoHasASameAccessBin
 
 }
