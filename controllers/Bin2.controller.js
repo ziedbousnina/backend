@@ -104,9 +104,20 @@ const CreateBin2 = async (req, res) => {
 };
 
 
+const fetchAllBins = async (req, res)=> {
+  try {
+    const bins = await BinModel.find();
+    res.status(200).json({ success: true, bins });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Failed to fetch bins' });
+  }
+}
+
+
 
 
 module.exports = 
 {
-  CreateBin2
+  CreateBin2,
+  fetchAllBins
 }
