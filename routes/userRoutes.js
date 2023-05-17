@@ -32,10 +32,12 @@ const {
   getAllUserWhoHasASameAccessBin
 } = require('../controllers/userController');
 const passport = require('passport');
-const protect = require('../middleware/authMiddleware.js')
+const protect = require('../middleware/authMiddleware.js');
+const { CreateReportOnuser } = require('../controllers/Report.controller');
 
 router.route('/').post(registerUser)
 router.route('/login').post(authUser)
+router.route('/createReport').post(passport.authenticate('jwt', {session: false}),CreateReportOnuser)
 router.route("/getUserCounts").get(getUsersCount)
 
 

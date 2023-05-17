@@ -917,7 +917,18 @@ const getAllUserWhoHasASameAccessBin = async(req, res)=> {
   res.json(populatedUsers);
  }
 
-
+const reportUser = async (req, res)=> {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (user) {
+    user.isReported = true;
+    await user.save();
+    res.json({ message: 'User reported' });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+}
 
 
 
