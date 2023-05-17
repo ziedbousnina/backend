@@ -234,7 +234,7 @@ const client = mqtt.connect('tls://9942400369fe41cea9a3c9bb8e6d23d5.s2.eu.hivemq
 function fetchDataAndSubscribe() {
   BinModel.find({}, (err, bins) => {
     if (err) {
-      console.error('Error fetching data:', err);
+      // console.error('Error fetching data:', err);
       return;
     }
 
@@ -245,26 +245,26 @@ function fetchDataAndSubscribe() {
 
       client.subscribe(topicOuv, (err) => {
         if (err) {
-          console.error(`Error subscribing to topic ${topicOuv}:`, err);
+          // console.error(`Error subscribing to topic ${topicOuv}:`, err);
           return;
         }
-        console.log(`Subscribed to topic ${topicOuv}`);
+        // console.log(`Subscribed to topic ${topicOuv}`);
       });
 
       client.subscribe(topicGaz, (err) => {
         if (err) {
-          console.error(`Error subscribing to topic ${topicGaz}:`, err);
+          // console.error(`Error subscribing to topic ${topicGaz}:`, err);
           return;
         }
-        console.log(`Subscribed to topic ${topicGaz}`);
+        // console.log(`Subscribed to topic ${topicGaz}`);
       });
 
       client.subscribe(topicNiv, (err) => {
         if (err) {
-          console.error(`Error subscribing to topic ${topicNiv}:`, err);
+          // console.error(`Error subscribing to topic ${topicNiv}:`, err);
           return;
         }
-        console.log(`Subscribed to topic ${topicNiv}`);
+        // console.log(`Subscribed to topic ${topicNiv}`);
       });
 
       client.on('message', (topic, message) => {
@@ -275,7 +275,7 @@ function fetchDataAndSubscribe() {
               // console.error('Error saving bin:', err);
               return;
             }
-            console.log('Bin updated:', bin);
+            // console.log('Bin updated:', bin);
           });
         } else if (topic === topicGaz) {
           bin.gaz = message.toString();
@@ -284,7 +284,7 @@ function fetchDataAndSubscribe() {
               // console.error('Error saving bin:', err);
               return;
             }
-            console.log('Bin updated:', bin);
+            // console.log('Bin updated:', bin);
           });
         } else if (topic === topicNiv) {
           bin.niv = message.toString();
@@ -293,7 +293,7 @@ function fetchDataAndSubscribe() {
               // console.error('Error saving bin:', err);
               return;
             }
-            console.log('Bin updated:', bin);
+            // console.log('Bin updated:', bin);
           });
         }
       });
