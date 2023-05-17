@@ -1,3 +1,4 @@
+const BinModel = require("../models/Bin.model");
 const binsModel = require("../models/bins.model");
 
 const CreateBin = async (req, res) => {
@@ -57,11 +58,11 @@ const getBinsCount = async (req, res) => {
   const lastDayDate = new Date();
   lastDayDate.setDate(currentDate.getDate() - 1);
 
-  const currentDayBinsCount = await binsModel.countDocuments({
+  const currentDayBinsCount = await BinModel.countDocuments({
     createdAt: { $gte: lastDayDate, $lt: currentDate }
   });
 
-  const totalBinsCount = await binsModel.countDocuments({});
+  const totalBinsCount = await BinModel.countDocuments({});
 
   const percentageIncrease = totalBinsCount ? ((currentDayBinsCount - totalBinsCount) / totalBinsCount) * 100 : 0;
 
