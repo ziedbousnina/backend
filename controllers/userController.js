@@ -897,14 +897,26 @@ const deblockUser = async(req, res)=>  {
 }
 
 const getAllUserWhoHasASameAccessBin = async(req, res)=> {
-  const {_id} = req.user
- 
-  const currentUser = await User.findById(_id)
- 
-  const users = await User.find({accessListBins: {$in: currentUser.accessListBins}, _id: {$ne: currentUser._id}})
- 
-  res.json(users)
+  const { _id } = req.user;
+
+  const currentUser = await User.findById(_id);
+
+  const users = await User.find({
+    accessListBins: { $in: currentUser.accessListBins },
+    _id: { $ne: currentUser._id },
+  });
+
+  // Fetch profiles for each user
+  const populatedUsers = await Promise.all(
+    users.map(async (user) => {
+      const profile = await profileModels.findOne({ user: user._id });
+      return { ...user.toObject(), profile }; // Combine user and profile data
+    })
+  );
+
+  res.json(populatedUsers);
  }
+
 
 
 
