@@ -151,7 +151,7 @@ const updateStatus = async (req, res) => {
       bin.status = false;
       await bin.save();
       console.log('Status updated to false after 10 seconds');
-    }, 10000);
+    }, 20000);
 
     res.status(200).json({ success: true, message: 'Bin updated successfully', bin });
   } catch (error) {
