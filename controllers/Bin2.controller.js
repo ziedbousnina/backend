@@ -1,51 +1,11 @@
 const BinModel = require("../models/Bin.model");
+const mqtt = require("mqtt");
+const client = mqtt.connect('tls://9942400369fe41cea9a3c9bb8e6d23d5.s2.eu.hivemq.cloud', {
+  username: 'amaltlili',
+  password: 'Amaltlili91'
+});
 
 
-
-// const CreateBin2 = async (req, res) => {
-//   console.log(req.body)
-//   try {
-//     const {
-//       name,
-//       location,
-//       address,
-//       lat,
-//       long,
-//       type,
-//       capacity,
-//       // status,
-//       gaz,
-//       niv,
-//       topicGaz,
-//       topicNiv,
-//       topicOuv
-//     } = req.body;
-
-//     // Create a new instance of Bin1 using the request body data
-//     const newBin = new BinModel({
-//       name,
-//       location,
-//       address,
-//       lat,
-//       long,
-//       type,
-//       capacity,
-//       status: false,
-//       gaz,
-//       niv,
-//       topicGaz,
-//       topicNiv,
-//       topicOuv
-//     });
-
-//     // Save the newBin instance to the database
-//     await newBin.save();
-
-//     res.status(201).json({ success: true, message: 'Bin created successfully' });
-//   } catch (error) {
-//     res.status(500).json({ success: false, error: 'Failed to create bin' });
-//   }
-// };
 const CreateBin2 = async (req, res) => {
   console.log(req.body);
   try {
@@ -114,10 +74,99 @@ const fetchAllBins = async (req, res)=> {
 }
 
 
+// const updateStatus = async (req, res)=> {
+//   try {
+//     const { id } = req.params;
+//     // const { status } = req.body;
+//     const bin = await BinModel.findById(id);
+
+//     if (!bin) {
+//       return res.status(404).json({ success: false, error: 'Bin not found' });
+//     }
+//     console.log(bin.topicOuv)
+//     bin.status = !bin.status;
+//     await bin.save();
+//     client.on("connect", function() {
+//           client.publish(bin.topicOuv, !bin.status)
+//           console.log("ok")
+//         })
+    
+    
+
+//     res.status(200).json({ success: true, message: 'Bin updated successfully', bin });
+//   } catch (error) {
+//     res.status(500).json({ success: false, error: 'Failed to update bin' });
+//   }
+// }
+// const updateStatus = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const bin = await BinModel.findById(id);
+
+//     if (!bin) {
+//       return res.status(404).json({ success: false, error: 'Bin not found' });
+//     }
+
+//     console.log(bin.topicOuv);
+//     bin.status = !bin.status;
+//     await bin.save();
+
+//     client.publish(bin.topicOuv, JSON.stringify(!bin.status), (err) => {
+//       if (err) {
+//         console.error('Failed to publish message:', err);
+//       } else {
+//         console.log('Message published successfully');
+//       }
+//     });
+
+//     res.status(200).json({ success: true, message: 'Bin updated successfully', bin });
+//   } catch (error) {
+//     console.error('Failed to update bin:', error);
+//     res.status(500).json({ success: false, error: 'Failed to update bin' });
+//   }
+// };
+
+const updateStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const bin = await BinModel.findById(id);
+
+    if (!bin) {
+      return res.status(404).json({ success: false, error: 'Bin not found' });
+    }
+
+    console.log(bin.topicOuv);
+    bin.status = !bin.status;
+    await bin.save();
+
+    client.publish(bin.topicOuv, JSON.stringify(!bin.status), (err) => {
+      if (err) {
+        console.error('Failed to publish message:', err);
+      } else {
+        console.log('Message published successfully');
+      }
+    });
+
+    setTimeout(async () => {
+      bin.status = false;
+      await bin.save();
+      console.log('Status updated to false after 10 seconds');
+    }, 10000);
+
+    res.status(200).json({ success: true, message: 'Bin updated successfully', bin });
+  } catch (error) {
+    console.error('Failed to update bin:', error);
+    res.status(500).json({ success: false, error: 'Failed to update bin' });
+  }
+};
+
+
+
 
 
 module.exports = 
 {
   CreateBin2,
-  fetchAllBins
+  fetchAllBins,
+  updateStatus
 }
