@@ -23,6 +23,7 @@ const { OAuth2Client } = require('google-auth-library');
 const Access = require('../models/access.model.js');
 const profileModels = require("../models/profile.models")
 const accessModel = require("../models/access.model");
+const pointBinV2 = require('../models/PointBinV2.Model.js');
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -86,11 +87,13 @@ const authUser = async (req, res) => {
 const addAccessCode = async(req, res)=> {
   const {code} = req.body
   const {_id} = req.user
+  console.log(code)
+  console.log(_id)
   
   console.log("code")
   try {
    
-      const access = await accessModel.findOne({ code: code });
+      const access = await pointBinV2.findOne({ code: code });
       if(!access) {
         return res.status(404).json({success:false, message: "code not found" });
       }
@@ -130,7 +133,8 @@ const getCurrentAccessList = async(req, res)=> {
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
-    const accessList = await accessModel.find({ _id: { $in: user.accessListBins } }).populate('company');
+    // const accessList = await accessModel.find({ _id: { $in: user.accessListBins } }).populate('company');
+    const accessList = await User.findById(_id).populate("accessListBins")
     res.status(200).json({ success: true, accessList });
   } catch (error) {
     if (!responseSent) {

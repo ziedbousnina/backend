@@ -35,7 +35,7 @@ const userSchema = mongoose.Schema(
         accessListBins : [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'Access',
+                ref: 'PointBinV2',
                 unique: true,
             }
         ],
