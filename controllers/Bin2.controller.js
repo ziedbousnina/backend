@@ -167,8 +167,16 @@ const updateStatus = async (req, res) => {
 
     setTimeout(async () => {
       bin.status = false;
-      await bin.save();
-      console.log('Status updated to false after 20 seconds');
+      client.publish(bin.topicOuv, JSON.stringify(bin.status),async (err) => {
+        if (err) {
+          console.error('Failed to publish message:', err);
+        } else {
+          console.log('Message published successfully');
+          await bin.save();
+          console.log('Status updated to false after 20 seconds');
+        }
+      });
+      
       
     }, 10000);
 
