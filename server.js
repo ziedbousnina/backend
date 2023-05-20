@@ -104,7 +104,7 @@ function fetchDataAndSubscribe() {
           // console.error(`Error subscribing to topic ${topicGaz}:`, err);
           return;
         }
-        // console.log(`Subscribed to topic ${topicGaz}`);
+        console.log(`Subscribed to topic ${topicGaz}`);
       });
 
       client.subscribe(topicNiv, (err) => {
@@ -112,7 +112,7 @@ function fetchDataAndSubscribe() {
           // console.error(`Error subscribing to topic ${topicNiv}:`, err);
           return;
         }
-        // console.log(`Subscribed to topic ${topicNiv}`);
+        console.log(`Subscribed to topic ${topicNiv}`);
       });
       
       client.on('message', (topic, message) => {
@@ -123,7 +123,7 @@ function fetchDataAndSubscribe() {
               // console.error('Error saving bin:', err);
               return;
             }
-            // console.log('Bin updated:', bin);
+            console.log('Bin updated:', bin);
           });
         } else if (topic === topicGaz) {
           bin.gaz = message.toString();
@@ -132,7 +132,7 @@ function fetchDataAndSubscribe() {
               // console.error('Error saving bin:', err);
               return;
             }
-            // console.log('Bin updated:', bin);
+            console.log('Bin updated:', bin);
           });
         } else if (topic === topicNiv) {
           bin.niv = message.toString();
@@ -141,7 +141,7 @@ function fetchDataAndSubscribe() {
               // console.error('Error saving bin:', err);
               return;
             }
-            // console.log('Bin updated:', bin);
+            console.log('Bin updated:', bin);
           });
         }
       });

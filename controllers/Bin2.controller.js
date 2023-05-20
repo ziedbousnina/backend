@@ -1,5 +1,6 @@
 const BinModel = require("../models/Bin.model");
 const mqtt = require("mqtt");
+const pointBinV2 = require("../models/PointBinV2.Model");
 const client = mqtt.connect('tls://9942400369fe41cea9a3c9bb8e6d23d5.s2.eu.hivemq.cloud', {
   username: 'amaltlili',
   password: 'Amaltlili91'
@@ -74,6 +75,23 @@ const fetchAllBins = async (req, res)=> {
 }
 
 
+const FetchBinsNotInPointBin = async (req, res) => {
+  try {
+    // Fetch all bin IDs present in PointBinV2
+    const pointBins = await pointBinV2.find().lean();
+    const binIdsInPointBinV2 = pointBins.reduce((ids, pointBin) => {
+      return ids.concat(pointBin.bins);
+    }, []);
+
+    // Fetch all bins that are not in PointBinV2
+    const binsNotInPointBinV2 = await BinModel.find({ _id: { $nin: binIdsInPointBinV2 } }).lean();
+
+    res.status(200).json(binsNotInPointBinV2);
+  } catch (error) {
+    console.error('Error fetching bins not in PointBinV2:', error);
+    res.status(500).json({ error: 'An internal server error occurred' });
+  }
+};
 // const updateStatus = async (req, res)=> {
 //   try {
 //     const { id } = req.params;
@@ -151,6 +169,7 @@ const updateStatus = async (req, res) => {
       bin.status = false;
       await bin.save();
       console.log('Status updated to false after 20 seconds');
+      
     }, 10000);
 
     res.status(200).json({ success: true, message: 'Bin updated successfully', bin });
@@ -168,5 +187,6 @@ module.exports =
 {
   CreateBin2,
   fetchAllBins,
-  updateStatus
+  updateStatus,
+  FetchBinsNotInPointBin
 }

@@ -7,7 +7,7 @@ const CreateReportOnuser = async (req, res) => {
   console.log(req?.files?.image?.path)
     const { isValid, errors } = validateReportUserInput(req.body);
     try {
-      if (!isValid) {
+      if (!isValid) {   
         res.status(404).json(errors);
       } else {
         if(req.files?.image?.size > 0){
