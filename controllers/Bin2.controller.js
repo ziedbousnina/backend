@@ -315,11 +315,11 @@ const OpenBinByIDBin = async (req, res) => {
       return res.status(404).json({ success: false, error: 'Bin not found' });
     }
     bin.status = false;
-    await bin.save();
-    client.publish(bin.topicOuv, JSON.stringify(false), (err) => {
+     client.publish(bin.topicOuv, JSON.stringify(false), async (err) => {
       if (err) {
         console.error('Failed to publish message:', err);
       } else {
+        await bin.save();
         console.log('Message published successfully');
       }
     });
