@@ -7,7 +7,6 @@ const client = mqtt.connect('tls://9942400369fe41cea9a3c9bb8e6d23d5.s2.eu.hivemq
   password: 'Amaltlili91'
 });
 
-
 const CreateBin2 = async (req, res) => {
   console.log(req.body);
   try {
@@ -65,7 +64,6 @@ const CreateBin2 = async (req, res) => {
   }
 };
 
-
 const fetchAllBins = async (req, res)=> {
   try {
     const bins = await BinModel.find();
@@ -74,7 +72,6 @@ const fetchAllBins = async (req, res)=> {
     res.status(500).json({ success: false, error: 'Failed to fetch bins' });
   }
 }
-
 
 const FetchBinsNotInPointBin = async (req, res) => {
   try {
@@ -93,57 +90,6 @@ const FetchBinsNotInPointBin = async (req, res) => {
     res.status(500).json({ error: 'An internal server error occurred' });
   }
 };
-// const updateStatus = async (req, res)=> {
-//   try {
-//     const { id } = req.params;
-//     // const { status } = req.body;
-//     const bin = await BinModel.findById(id);
-
-//     if (!bin) {
-//       return res.status(404).json({ success: false, error: 'Bin not found' });
-//     }
-//     console.log(bin.topicOuv)
-//     bin.status = !bin.status;
-//     await bin.save();
-//     client.on("connect", function() {
-//           client.publish(bin.topicOuv, !bin.status)
-//           console.log("ok")
-//         })
-    
-    
-
-//     res.status(200).json({ success: true, message: 'Bin updated successfully', bin });
-//   } catch (error) {
-//     res.status(500).json({ success: false, error: 'Failed to update bin' });
-//   }
-// }
-// const updateStatus = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const bin = await BinModel.findById(id);
-
-//     if (!bin) {
-//       return res.status(404).json({ success: false, error: 'Bin not found' });
-//     }
-
-//     console.log(bin.topicOuv);
-//     bin.status = !bin.status;
-//     await bin.save();
-
-//     client.publish(bin.topicOuv, JSON.stringify(!bin.status), (err) => {
-//       if (err) {
-//         console.error('Failed to publish message:', err);
-//       } else {
-//         console.log('Message published successfully');
-//       }
-//     });
-
-//     res.status(200).json({ success: true, message: 'Bin updated successfully', bin });
-//   } catch (error) {
-//     console.error('Failed to update bin:', error);
-//     res.status(500).json({ success: false, error: 'Failed to update bin' });
-//   }
-// };
 
 const updateStatus = async (req, res) => {
   try {
@@ -208,7 +154,6 @@ const fetchBinByID = async (req, res) => {
   }
 };
 
-
 const fetchAccessListBinByUser = async (req, res) => {
   const { _id } = req.user;
 
@@ -231,147 +176,6 @@ const fetchAccessListBinByUser = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
-// const OpenBinByIDBin = async (req, res) => {
-//   const { id } = req.params;
-//   const { _id } = req.user;
-
-//   try {
-//     // Assuming you have imported the 'User' model and the 'PointBinV2' model
-
-//     // Find the user by their ID and populate the 'accessListBins' field
-//     const user = await userModel.findById(_id).populate('accessListBins');
-    
-
-//     if (!user) {
-//       return res.status(404).json({ message: 'User not found' });
-//     }
-// console.log("user :", user)
-//     // Check if the point bin exists in the user's access list
-//     const accessBin = user.accessListBins.find(bin => bin._id.toString() === id);
-//     if (!accessBin) {
-//       return res.status(403).json({ message: 'Access denied' });
-//     }
-
-//     // Find the bin in the PointBinV2 model by its ID
-//     const bin = await BinModel.findById(id);
-
-//     if (!bin) {
-//       return res.status(404).json({ message: 'Bin not found' });
-//     }
-
-//     // Update the status of the bin to false
-//     bin.status = false;
-//     await bin.save();
-
-//     res.status(200).json({ message: 'Bin opened successfully' });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// };
-
-// const OpenBinByIDBin = async (req, res) => {
-//   const { id } = req.params;
-//   const { _id } = req.user;
-//   console.log(id)
-
-//   try {
-//     // Assuming you have imported the 'User' model and the 'PointBinV2' model
-
-//     // Find the user by their user_id
-//     const user = await userModel.findById(_id);
-
-//     if (!user) {
-//       return res.status(404).json({ message: 'User not found' });
-//     }
-
-//     // Search the user's accessListBins for a bin with the specified idBin
-//     const PointBin1 = await pointBinV2.find()
-   
-//     const matchingPointBins = PointBin1?.filter((pointBin) =>
-//       pointBin.bins.includes(id)
-//     );
-
-//     if (matchingPointBins.length === 0) {
-//       return res.status(404).json({ error: 'PointBin not found' });
-//     }
-
-//     console.log('PointBin', matchingPointBins)
-//     console.log('user', user.accessListBins?.filter((pointBin) =>
-//       pointBin == matchingPointBins[0]._id.toString()))
-
-//     const matchingPointid = user.accessListBins?.filter((pointBin) =>
-//       pointBin == matchingPointBins[0]._id.toString()
-//     );
-
-//     if (matchingPointid.length === 0) {
-//       return res.status(404).json({ error: 'you dont have access' });
-//     }
-
-//     const bin = await BinModel.findById(id)
-//     console.log(bin)
-//     if (!bin) {
-//       return res.status(404).json({ success: false, error: 'Bin not found' });
-//     }
-//     bin.status = false;
-//      client.publish(bin.topicOuv, JSON.stringify(false), async (err) => {
-//       if (err) {
-//         console.error('Failed to publish message:', err);
-//       } else {
-//         await bin.save();
-//         console.log('Message published successfully');
-//       }
-//     });
-
-//     setTimeout(async () => {
-//       bin.status = true;
-//       client.publish(bin.topicOuv, JSON.stringify(true),async (err) => {
-//         if (err) {
-//           console.error('Failed to publish message:', err);
-//         } else {
-//           console.log('Message published successfully');
-//           await bin.save();
-//           console.log('Status updated to false after 20 seconds');
-//         }
-//       });
-      
-      
-//     }, 10000);
-
-
-//     res.status(200).json({ success: true, message: 'Bin updated successfully', bin });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// };
-
-// const OpenBinByIDBin = async(req, res)=> {
-//   const { id } = req.params;
-//   const { _id } = req.user;
-//   console.log(id)
-
-//   try {
-//     const user = await userModel.findById(_id);
-
-//     if (!user) {
-//       return res.status(404).json({ message: 'User not found' });
-//     }
-
-//     const PointBin1 = await pointBinV2.find()
-//    const matchingPointBins = PointBin1?.filter((pointBin) =>
-//       // pointBin.bins.includes(id)
-//       console.log("Point bin",pointBin.bins)
-//     );
-
-//     console.log("matchingPointBins", matchingPointBins)
-
-//     return res.status(200).json({});
-//   } catch (error) {
-    
-//   }
-// }
 
 const OpenBinByIDBin = async (req, res) => {
   const { id } = req.params;
@@ -491,6 +295,21 @@ const fetchAllPointBinsAndHerBinsByUserId = async (req, res) => {
 };
 
 
+const deleteBin = async(req, res)=> {
+  const { id } = req.params;
+  try {
+    const bin = await BinModel.findById(id);
+    if (!bin) {
+      return res.status(404).json({ error: 'Bin not found' });
+    }
+    await bin.remove();
+    res.status(200).json({ success: true, message: 'Bin deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
 module.exports = 
 {
   CreateBin2,
@@ -500,5 +319,6 @@ module.exports =
   fetchBinByID,
   fetchAccessListBinByUser,
   OpenBinByIDBin,
-  fetchAllPointBinsAndHerBinsByUserId
+  fetchAllPointBinsAndHerBinsByUserId,
+  deleteBin
 }
