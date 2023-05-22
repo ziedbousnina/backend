@@ -422,25 +422,25 @@ const PointBin1 = await pointBinV2.find()
       if (err) {
         console.error('Failed to publish message:', err);
       } else {
-        await bin.save();
         console.log('Message published successfully');
+        await bin.save();
       }
     });
 
     setTimeout(async () => {
       bin.status = true;
-      client.publish(bin.topicOuv, JSON.stringify(true),async (err) => {
-        if (err) {
-          console.error('Failed to publish message:', err);
-        } else {
-          console.log('Message published successfully');
+      // client.publish(bin.topicOuv, JSON.stringify(true),async (err) => {
+      //   if (err) {
+      //     console.error('Failed to publish message:', err);
+      //   } else {
+      //     console.log('Message published successfully');
+      //     console.log('Status updated to false after 20 seconds');
+      //   }
+      // });
           await bin.save();
-          console.log('Status updated to false after 20 seconds');
-        }
-      });
       
       
-    }, 10000);
+    }, 30000);
 
 
     res.status(200).json({ success: true, message: 'Bin updated successfully', bin });
