@@ -271,44 +271,147 @@ const fetchAccessListBinByUser = async (req, res) => {
 //   }
 // };
 
+// const OpenBinByIDBin = async (req, res) => {
+//   const { id } = req.params;
+//   const { _id } = req.user;
+//   console.log(id)
+
+//   try {
+//     // Assuming you have imported the 'User' model and the 'PointBinV2' model
+
+//     // Find the user by their user_id
+//     const user = await userModel.findById(_id);
+
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+
+//     // Search the user's accessListBins for a bin with the specified idBin
+//     const PointBin1 = await pointBinV2.find()
+   
+//     const matchingPointBins = PointBin1?.filter((pointBin) =>
+//       pointBin.bins.includes(id)
+//     );
+
+//     if (matchingPointBins.length === 0) {
+//       return res.status(404).json({ error: 'PointBin not found' });
+//     }
+
+//     console.log('PointBin', matchingPointBins)
+//     console.log('user', user.accessListBins?.filter((pointBin) =>
+//       pointBin == matchingPointBins[0]._id.toString()))
+
+//     const matchingPointid = user.accessListBins?.filter((pointBin) =>
+//       pointBin == matchingPointBins[0]._id.toString()
+//     );
+
+//     if (matchingPointid.length === 0) {
+//       return res.status(404).json({ error: 'you dont have access' });
+//     }
+
+//     const bin = await BinModel.findById(id)
+//     console.log(bin)
+//     if (!bin) {
+//       return res.status(404).json({ success: false, error: 'Bin not found' });
+//     }
+//     bin.status = false;
+//      client.publish(bin.topicOuv, JSON.stringify(false), async (err) => {
+//       if (err) {
+//         console.error('Failed to publish message:', err);
+//       } else {
+//         await bin.save();
+//         console.log('Message published successfully');
+//       }
+//     });
+
+//     setTimeout(async () => {
+//       bin.status = true;
+//       client.publish(bin.topicOuv, JSON.stringify(true),async (err) => {
+//         if (err) {
+//           console.error('Failed to publish message:', err);
+//         } else {
+//           console.log('Message published successfully');
+//           await bin.save();
+//           console.log('Status updated to false after 20 seconds');
+//         }
+//       });
+      
+      
+//     }, 10000);
+
+
+//     res.status(200).json({ success: true, message: 'Bin updated successfully', bin });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };
+
+// const OpenBinByIDBin = async(req, res)=> {
+//   const { id } = req.params;
+//   const { _id } = req.user;
+//   console.log(id)
+
+//   try {
+//     const user = await userModel.findById(_id);
+
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+
+//     const PointBin1 = await pointBinV2.find()
+//    const matchingPointBins = PointBin1?.filter((pointBin) =>
+//       // pointBin.bins.includes(id)
+//       console.log("Point bin",pointBin.bins)
+//     );
+
+//     console.log("matchingPointBins", matchingPointBins)
+
+//     return res.status(200).json({});
+//   } catch (error) {
+    
+//   }
+// }
+
 const OpenBinByIDBin = async (req, res) => {
   const { id } = req.params;
   const { _id } = req.user;
-  console.log(id)
 
   try {
     // Assuming you have imported the 'User' model and the 'PointBinV2' model
 
-    // Find the user by their user_id
-    const user = await userModel.findById(_id);
+    // Find the user by their ID and populate the 'accessListBins' field
+    const user = await userModel.findById(_id).populate('accessListBins')
+    
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-
+const PointBin1 = await pointBinV2.find()
     // Search the user's accessListBins for a bin with the specified idBin
-    const PointBin1 = await pointBinV2.find()
-   
     const matchingPointBins = PointBin1?.filter((pointBin) =>
       pointBin.bins.includes(id)
     );
-
+    // If the bin is found, return the bin
     if (matchingPointBins.length === 0) {
       return res.status(404).json({ error: 'PointBin not found' });
     }
-
-    console.log('PointBin', matchingPointBins)
-    console.log('user', user.accessListBins?.filter((pointBin) =>
-      pointBin == matchingPointBins[0]._id.toString()))
-
-    const matchingPointid = user.accessListBins?.filter((pointBin) =>
-      pointBin == matchingPointBins[0]._id.toString()
-    );
-
-    if (matchingPointid.length === 0) {
-      return res.status(404).json({ error: 'you dont have access' });
+    console.log("User access list bin", user.accessListBins)
+    // const accessBin = user.accessListBins.find(bin => bin._id.toString() === id);
+    const accessBin = user.accessListBins.flatMap(el => {
+      return el.bins.filter(bin => {
+        console.log("-----------", bin._id.toString() === id);
+        return bin._id.toString() === id;
+      });
+    });
+    console.log("Accesss",accessBin )
+    console.log("Accesss",accessBin.length)
+    if (accessBin.length===0) {
+      return res.status(403).json({ message: 'Access denied' });
     }
+    // return res.status(200).json(matchingPointBins);
 
+    // Find the bin in the PointBinV2 model by its ID
     const bin = await BinModel.findById(id)
     console.log(bin)
     if (!bin) {
@@ -347,10 +450,46 @@ const OpenBinByIDBin = async (req, res) => {
   }
 };
 
+const fetchAllPointBinsAndHerBinsByUserId = async (req, res) => {
+  const {_id} = req.user
+  try {
+     // Assuming the user ID is passed as a parameter in the request
 
-const findBinByID = async(res, req)=> {
+    // 1. Fetch the user by ID
+    const user = await userModel.findById(_id).populate('accessListBins');
+    // console.log(user)
 
-}
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // 2. Get the list of accessListBins for the user
+    const accessListBins = user.accessListBins;
+
+    // 3. Fetch all PointBins and populate their bins
+    const pointBins = await pointBinV2.find().populate({
+      path: 'bins',
+      model: 'Bin1',
+    });
+    console.log("access :",accessListBins)
+
+    // 4. Filter the pointBins based on the accessListBins of the user
+    const filteredPointBins = pointBins.filter((pointBin) =>
+  accessListBins.some((e) => e._id.toString() === pointBin._id.toString())
+);
+    accessListBins.map(e=>{
+      console.log("Id:",e._id.toString())
+      // return e._id == pointBin._id
+    })
+    console.log("--------------------",filteredPointBins)
+
+    return res.status(200).json({ pointBins: filteredPointBins });
+  } catch (error) {
+    console.error('Error fetching point bins:', error);
+    return res.status(500).json({ message: 'Server Error' });
+  }
+};
+
 
 module.exports = 
 {
@@ -360,5 +499,6 @@ module.exports =
   FetchBinsNotInPointBin,
   fetchBinByID,
   fetchAccessListBinByUser,
-  OpenBinByIDBin
+  OpenBinByIDBin,
+  fetchAllPointBinsAndHerBinsByUserId
 }
