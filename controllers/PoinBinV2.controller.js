@@ -87,10 +87,27 @@ const fetchPointBinByID = async (req, res) => {
   }
 };
 
+const UpdatePointBin = async (req, res) => {
+  const id = req.params.id; // Assuming the bin ID is passed as a parameter
+
+  try {
+    
+    const updatedBin = await pointBinV2.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true } // Return the updated bin after the update is applied
+    );
+
+    res.status(200).json(updatedBin);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while updating the bin.' });
+  }
+};
 
 module.exports = {
   createPointBinV2,
   fetchAllPointBins,
   deletePointBin,
-  fetchPointBinByID
+  fetchPointBinByID,
+  UpdatePointBin
 }
