@@ -68,6 +68,38 @@ const CreateBin2 = async (req, res) => {
   }
 };
 
+const UpdateBin = async (req, res) => {
+  const id = req.params.id; // Assuming the bin ID is passed as a parameter
+
+  try {
+    const existingBin = await BinModel.findOne({
+      $and: [
+        { _id: { $ne: id } }, // Exclude the current bin being updated
+        {
+          $or: [
+            { topicGaz: req.body.topicGaz },
+            { topicNiv: req.body.topicNiv },
+            { topicOuv: req.body.topicOuv }
+          ]
+        }
+      ]
+    });
+    
+    if (existingBin) {
+      return res.status(400).json({ success: false, error: 'Topics must be unique' });
+    }
+    const updatedBin = await BinModel.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true } // Return the updated bin after the update is applied
+    );
+
+    res.status(200).json(updatedBin);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while updating the bin.' });
+  }
+};
+
 const fetchAllBins = async (req, res)=> {
   try {
     const bins = await BinModel.find();
@@ -324,5 +356,6 @@ module.exports =
   fetchAccessListBinByUser,
   OpenBinByIDBin,
   fetchAllPointBinsAndHerBinsByUserId,
-  deleteBin
+  deleteBin,
+  UpdateBin
 }

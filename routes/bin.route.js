@@ -3,7 +3,7 @@ const passport = require('passport');
 const { ROLES, isRole } = require('../security/Rolemiddleware');
 const { addBinToScepcifiqueCompany, CreateAccess } = require('../controllers/Access.controller');
 const { CreateBin, getAllBins, getBinsCount } = require('../controllers/Bin.controller');
-const { CreateBin2, fetchAllBins, updateStatus, FetchBinsNotInPointBin, fetchBinByID, fetchAccessListBinByUser, OpenBinByIDBin, fetchAllPointBinsAndHerBinsByUserId, deleteBin } = require('../controllers/Bin2.controller');
+const { CreateBin2, fetchAllBins, updateStatus, FetchBinsNotInPointBin, fetchBinByID, fetchAccessListBinByUser, OpenBinByIDBin, fetchAllPointBinsAndHerBinsByUserId, deleteBin, UpdateBin } = require('../controllers/Bin2.controller');
 const { fetchAllPointBins } = require('../controllers/PoinBinV2.controller');
 
 
@@ -23,6 +23,7 @@ router.route('/deleteBinById/:id').delete(deleteBin)
 router.route("/openBin/:id").put(passport.authenticate('jwt', {session: false}),OpenBinByIDBin)
 router.route('/fetchBinByID/:id').get( fetchBinByID )
 router.route('/updateStatus/:id').put( updateStatus )
+router.route('/updateBin/:id').put( UpdateBin )
 
 
 
