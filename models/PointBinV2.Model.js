@@ -11,6 +11,8 @@ const PointBinV2 = mongoose.Schema(
             ref: 'Quote',
             required: true,
         },
+        governorate:String,
+        municipale:String,
         bins: [
             {
                 type: mongoose.Schema.Types.ObjectId,
