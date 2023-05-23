@@ -9,7 +9,9 @@ const PointBin = mongoose.Schema(
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Bin1'
             }
-        ]
+        ],
+        governorate:String,
+    municipale:String
        
         
 
