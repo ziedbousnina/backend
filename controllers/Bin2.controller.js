@@ -22,7 +22,9 @@ const CreateBin2 = async (req, res) => {
       niv,
       topicGaz,
       topicNiv,
-      topicOuv
+      topicOuv,
+      governorate,
+      municipale
     } = req.body;
 
     // Check if the topics already exist
@@ -52,7 +54,9 @@ const CreateBin2 = async (req, res) => {
       niv,
       topicGaz,
       topicNiv,
-      topicOuv
+      topicOuv,
+      governorate,
+      municipale
     });
 
     // Save the newBin instance to the database

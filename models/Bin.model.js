@@ -16,6 +16,8 @@ const binSchema1 = mongoose.Schema(
     topicGaz: { type: String, unique: true },
     topicNiv: { type: String, unique: true },
     topicOuv: { type: String, unique: true },
+    governorate:String,
+    municipale:String
   },
   {
     timestamps: true
