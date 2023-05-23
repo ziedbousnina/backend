@@ -43,6 +43,20 @@ const createPointBinV2 = async (req, res) => {
   }
 };
 
+const deletePointBin = async(req, res)=> {
+  const { id } = req.params;
+  try {
+    const bin = await pointBinV2.findById(id);
+    if (!bin) {
+      return res.status(404).json({ error: 'Point Bin not found' });
+    }
+    await bin.remove();
+    res.status(200).json({ success: true, message: 'Point Bin deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
 
 
 const fetchAllPointBins = async (req, res)=> {
@@ -58,5 +72,6 @@ const fetchAllPointBins = async (req, res)=> {
 
 module.exports = {
   createPointBinV2,
-  fetchAllPointBins
+  fetchAllPointBins,
+  deletePointBin
 }
