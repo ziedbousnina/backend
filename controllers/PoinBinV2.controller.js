@@ -72,7 +72,7 @@ const fetchPointBinByID = async (req, res) => {
   const binID = req.params.id; // Assuming the ID is passed as a route parameter
 
   try {
-    const bin = await pointBinV2.findById(binID).populate("bins"); // Assuming you have a model named 'Bin1' for binSchema1
+    const bin = await pointBinV2.findById(binID).populate("bins").populate('quoteDemande');; // Assuming you have a model named 'Bin1' for binSchema1
 
     if (!bin) {
       // If bin is not found, return an appropriate response
