@@ -49,7 +49,7 @@ const CreateBin2 = async (req, res) => {
       long,
       type,
       capacity,
-      status: false,
+      status: true,
       gaz,
       niv,
       topicGaz,
