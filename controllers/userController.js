@@ -7,6 +7,7 @@ var mailer = require('../utils/mailer');
 const { generateOtp,verifyOtp } = require('../utils/otp.js');
 const validateRegisterInput = require('../validation/Register')
 const validateGoogleRegisterInput = require('../validation/Register')
+const validateFeedbackInput = require('../validation/FeedbackValidation')
 const validateLoginInput = require('../validation/login')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -24,6 +25,7 @@ const Access = require('../models/access.model.js');
 const profileModels = require("../models/profile.models")
 const accessModel = require("../models/access.model");
 const pointBinV2 = require('../models/PointBinV2.Model.js');
+const FeedbackModel = require('../models/Feedback.Model.js');
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -934,6 +936,33 @@ const reportUser = async (req, res)=> {
   }
 }
 
+const CreateFeedback = async (req, res)=> {
+  const { isValid, errors } = validateFeedbackInput(req.body);
+  console.log(req.body);
+  
+  
+    
+  const {_id} =req.user
+  const {feedback} = req.body
+  try {
+    if (!isValid) {
+      res.status(404).json(errors);
+    } else {
+    
+    const feedbacks = new FeedbackModel({
+      user: _id,
+      feedback
+    })
+    const createdFeedback = await feedbacks.save()
+    res.status(201).json(createdFeedback)
+  }
+  } catch (error) {
+    
+    res.status(400).json(error)
+  }
+  
+}
+
 
 
 
@@ -959,6 +988,7 @@ module.exports = {
   getAllUserDetailsById,
   blockUser,
   deblockUser,
-  getAllUserWhoHasASameAccessBin
+  getAllUserWhoHasASameAccessBin,
+  CreateFeedback
 
 }

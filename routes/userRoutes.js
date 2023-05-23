@@ -29,7 +29,8 @@ const {
   getAllUserDetailsById,
   blockUser,
   deblockUser,
-  getAllUserWhoHasASameAccessBin
+  getAllUserWhoHasASameAccessBin,
+  CreateFeedback
 } = require('../controllers/userController');
 const passport = require('passport');
 const protect = require('../middleware/authMiddleware.js');
@@ -39,6 +40,7 @@ router.route('/').post(registerUser)
 router.route('/login').post(authUser)
 router.route('/createReport').post(passport.authenticate('jwt', {session: false}),CreateReportOnuser)
 router.route('/createSupport').post(passport.authenticate('jwt', {session: false}),CreateSupport)
+router.route('/createFeedback').post(passport.authenticate('jwt', {session: false}),CreateFeedback)
 router.route("/getUserCounts").get(getUsersCount)
 
 

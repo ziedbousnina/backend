@@ -3,26 +3,6 @@ const userModel = require("../models/userModel");
 
 
 
-// const CreateAccess = async (req, res) => {
-//   try {
-//     const { companyId } = req.body
-
-//     // Check if the company exists
-//     const companyExists = await userModel.findById(companyId)
-//     if (!companyExists) {
-//       return res.status(404).json({ message: 'Company not found' })
-//     }
-
-//     // Create a new access record
-//     const access = new accessModel({ company: companyId })
-//     await access.save()
-
-//     return res.status(201).json({ access })
-//   } catch (error) {
-//     console.error(error)
-//     return res.status(500).json({ message: 'Server error' })
-//   }
-// }
 const CreateAccess = async (req, res) => {
   try {
     const { companyId } = req.body;
@@ -56,71 +36,6 @@ const CreateAccess = async (req, res) => {
     });
   }
 };
-
-
-// const CreateAccess = async (req, res) => {
-//   try {
-//     const { companyId, bins } = req.body;
-
-//     const lastAccess = await accessModel.findOne().sort({ createdAt: 'desc' });
-//     const lastCode = lastAccess ? lastAccess.code : 1000;
-//     console.log((parseInt( lastCode) + 1) % 10000) 
-//     const newCode = (parseInt( lastCode) + 1) % 10000; 
-
-//     const newAccess = new accessModel({
-//       company: companyId,
-//       bins,
-//       // code: newCode
-//     });
-
-//     const savedAccess = await newAccess.save();
-
-//     res.status(201).json({
-//       message: 'Access record created successfully',
-//       data: savedAccess
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({
-//       message: 'Failed to create access record',
-//       error
-//     });
-//   }
-// };
-
-// const CreateAccess = async (req, res) => {
-//   try {
-//     const { companyId, bins } = req.body;
-
-//     const existingAccess = await accessModel.findOne({ company: companyId });
-//     if (existingAccess) {
-//       return res.status(400).json({
-//         message: 'Access record with this company already exists',
-//       });
-//     }
-
-  
-//     const newAccess = new accessModel({
-//       company: companyId,
-//       bins,
-//     });
-
-//     const savedAccess = await newAccess.save();
-
-//     res.status(201).json({
-//       message: 'Access record created successfully',
-//       data: savedAccess
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({
-//       message: 'Failed to create access record',
-//       error
-//     });
-//   }
-// };
-
-
 
 const addBinToScepcifiqueCompany = async (req, res) => {
   try {
