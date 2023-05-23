@@ -68,10 +68,29 @@ const fetchAllPointBins = async (req, res)=> {
   }
 }
 
+const fetchPointBinByID = async (req, res) => {
+  const binID = req.params.id; // Assuming the ID is passed as a route parameter
+
+  try {
+    const bin = await pointBinV2.findById(binID).populate("bins"); // Assuming you have a model named 'Bin1' for binSchema1
+
+    if (!bin) {
+      // If bin is not found, return an appropriate response
+      return res.status(404).json({ error: 'Point Bin not found' });
+    }
+
+    // If bin is found, return the bin object in the response
+    res.json(bin);
+  } catch (error) {
+    // If any error occurs during the database query, return an error response
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 
 module.exports = {
   createPointBinV2,
   fetchAllPointBins,
-  deletePointBin
+  deletePointBin,
+  fetchPointBinByID
 }
