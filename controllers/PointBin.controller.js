@@ -1,3 +1,5 @@
+const BinModel = require("../models/Bin.model");
+const pointBinV2 = require("../models/PointBinV2.Model");
 const pointBinModel = require("../models/pointBin.model");
 
 const CreatePointBin = async (req, res) => {
@@ -84,43 +86,6 @@ const AddBinToPointBin = async (req, res) => {
   }
 };
 
-
-// const CreatePointBin = async (req, res) => {
-//   try {
-//     // Extract the bin details from the request body
-//     const { name, location, lat, lng, type, capacity, status, bins } = req.body;
-
-//     // Create a new bin instance using the Bin model
-//     const Pointbin = new pointBinModel({
-//       name,
-//       location,
-//       lat,
-//       lng,
-//       type,
-//       capacity,
-//       status,
-//     });
-
-//     // Save the bin instance to the database
-//     await Pointbin.save();
-
-//     // Return a success response
-//     return res.status(201).json({
-//       success: true,
-//       message: 'Bin created successfully',
-//       data: Pointbin,
-//     });
-//   } catch (error) {
-//     // Handle any errors that occur during the process
-//     console.error(error);
-//     return res.status(500).json({
-//       success: false,
-//       message: 'Unable to create bin',
-//       error: error.message,
-//     });
-//   }
-// };
-
 const getAllPointBins = async (req, res)=> {
   try {
     const Pointbins = await pointBinModel.find();
@@ -137,10 +102,50 @@ const getAllPointBins = async (req, res)=> {
   }
 }
 
+const deleteBinFromPointBin = async (req, res) => {
+  const pointBinId = req.params.pointBinId;
+  const binId = req.params.binId;
+  console.log("Pointbin",pointBinId)
+  console.log("bin id",binId)
+  try {
+
+    // Find the PointBinV2 document
+    const pointBin = await pointBinV2.findById(pointBinId);
+
+    if (!pointBin) {
+      return res.status(404).json({ error: 'PointBinV2 not found' });
+    }
+
+    // Find the Bin1 document to be deleted
+    const bin = await BinModel.findById(binId);
+
+    if (!bin) {
+      return res.status(404).json({ error: 'Bin1 not found' });
+    }
+
+    // Check if the Bin1 document is associated with the PointBinV2 document
+    if (!pointBin.bins.includes(binId)) {
+      return res.status(400).json({ error: 'Bin1 is not associated with the PointBinV2' });
+    }
+
+    // Remove the Bin1 document from the PointBinV2 document's bins array
+    pointBin.bins.pull(binId);
+
+    // Save the updated PointBinV2 document
+    await pointBin.save();
+
+    res.status(200).json({ message: 'Bin1 removed from PointBinV2 successfully' });
+  } catch (error) {
+    console.error('Error deleting Bin1 from PointBinV2:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = 
 {
 
   CreatePointBin,
   getAllPointBins,
-  AddBinToPointBin
+  AddBinToPointBin,
+  deleteBinFromPointBin
 }
