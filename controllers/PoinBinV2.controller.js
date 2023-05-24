@@ -119,6 +119,7 @@ const fetchPointBinByMunicipal = async (req, res) => {
 };
 
 
+
 module.exports = {
   createPointBinV2,
   fetchAllPointBins,

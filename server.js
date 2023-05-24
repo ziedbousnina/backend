@@ -78,6 +78,16 @@ const client = mqtt.connect('tls://9942400369fe41cea9a3c9bb8e6d23d5.s2.eu.hivemq
   password: 'Amaltlili91'
 });
 
+const client2 = mqtt.connect('tls://f8f43b3a505c48d7934f2734eb410119.s2.eu.hivemq.cloud', {
+  username: 'hivemq.webclient.1683975887446',
+  password: 'jf?!1W4GcY5xh3gPE;S<'
+});
+client.on('connect', function() {
+  client.subscribe('waste_level');
+
+  console.log("client has been subscribed successfully");
+});
+
 
 function fetchDataAndSubscribe() {
   BinModel.find({}, (err, bins) => {
@@ -91,6 +101,7 @@ function fetchDataAndSubscribe() {
       const topicGaz = bin.topicGaz;
       const topicNiv = bin.topicNiv;
 
+      // subscribe to topics Using Amal client 
       client.subscribe(topicOuv, (err) => {
         if (err) {
           // console.error(`Error subscribing to topic ${topicOuv}:`, err);
@@ -116,6 +127,63 @@ function fetchDataAndSubscribe() {
       });
       
       client.on('message', (topic, message) => {
+        if (topic === topicOuv) {
+          bin.valueOuv = message.toString();
+          bin.save((err) => {
+            if (err) {
+              // console.error('Error saving bin:', err);
+              return;
+            }
+            console.log('Bin updated:', bin);
+          });
+        } else if (topic === topicGaz) {
+          bin.gaz = message.toString();
+          bin.save((err) => {
+            if (err) {
+              // console.error('Error saving bin:', err);
+              return;
+            }
+            console.log('Bin updated:', bin);
+          });
+        } else if (topic === topicNiv) {
+          bin.niv = message.toString();
+          bin.save((err) => {
+            if (err) {
+              // console.error('Error saving bin:', err);
+              return;
+            }
+            console.log('Bin updated:', bin);
+          });
+        }
+      });
+
+      // ------------------------------------------------------------------------------------
+      // Subscribe to topics using aymen client
+      client2.subscribe(topicOuv, (err) => {
+        if (err) {
+          // console.error(`Error subscribing to topic ${topicOuv}:`, err);
+          return;
+        }
+        // console.log(`Subscribed to topic ${topicOuv}`);
+      });
+
+      client2.subscribe(topicGaz, (err) => {
+        if (err) {
+          // console.error(`Error subscribing to topic ${topicGaz}:`, err);
+          return;
+        }
+        console.log(`Subscribed to topic ${topicGaz}`);
+      });
+
+      client2.subscribe(topicNiv, (err) => {
+        if (err) {
+          // console.error(`Error subscribing to topic ${topicNiv}:`, err);
+          return;
+        }
+        console.log(`Subscribed to topic ${topicNiv}`);
+      });
+      
+      client2.on('message', (topic, message) => {
         if (topic === topicOuv) {
           bin.valueOuv = message.toString();
           bin.save((err) => {
