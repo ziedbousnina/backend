@@ -104,10 +104,26 @@ const UpdatePointBin = async (req, res) => {
   }
 };
 
+const fetchPointBinByMunicipal = async (req, res) => {
+  const { municipal } = req.params;
+
+  try {
+    // Find point bins by municipal
+    const pointBins = await pointBinV2.find({ municipale: municipal }).populate('bins');
+
+    res.status(200).json(pointBins);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch point bins by municipal' });
+  }
+};
+
+
 module.exports = {
   createPointBinV2,
   fetchAllPointBins,
   deletePointBin,
   fetchPointBinByID,
-  UpdatePointBin
+  UpdatePointBin,
+  fetchPointBinByMunicipal
 }
