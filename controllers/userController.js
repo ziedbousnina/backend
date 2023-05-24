@@ -59,7 +59,8 @@ const authUser = async (req, res) => {
             email: user.email,
             role: user.role,
             verified:user.verified,
-            profile: user.profile
+            profile: user.profile,
+            isBlocked:user.isBlocked
           },
           process.env.SECRET_KEY,
           { expiresIn: Number.MAX_SAFE_INTEGER }
