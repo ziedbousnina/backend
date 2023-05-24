@@ -12,7 +12,10 @@ const binSchema1 = mongoose.Schema(
     capacity: String,
     status: Boolean,
     gaz: String,
-    niv: String,
+    niv: {
+      type: String,
+      default:"0"
+    },
     topicGaz: { type: String, unique: true },
     topicNiv: { type: String, unique: true },
     topicOuv: { type: String, unique: true },
