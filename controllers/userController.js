@@ -615,7 +615,8 @@ const resetPassword = async (req, res) => {
     return sendError(res, 'Password must be between 8 and 20 characters');
   }
 
-  user.password = password.trim();
+  // user.password = password.trim();
+  user.password = bcrypt.hashSync(password.trim(), 10);
   await user.save();
 
   await resetTokenModels.findOneAndDelete({ owner: user._id });
