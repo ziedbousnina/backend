@@ -22,7 +22,7 @@ const resetTokenSchema = new Schema({
 
 resetTokenSchema.pre('save', async function(next) {
     if (this.isModified('token')) {
-        this.token = await bcrypt.hashSync(this.token, 10)
+        this.token = await bcrypt.hash(this.token, 8)
     }
     next()
 })
