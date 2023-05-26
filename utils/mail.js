@@ -22,7 +22,7 @@ exports.mailTransport =()=>
         return `
         <div style="background-color: #f5f5f5; padding: 10px; text-align: center;">
         <div style="background-color: #fff; padding: 20px; border-radius: 5px;">
-          <h2 style="color: #333; font-size: 24px; font-weight: 500; margin: 0 0 10px;">Welcome to Conteneur Connecté</h2>
+          <h2 style="color: #333; font-size: 24px; font-weight: 500; margin: 0 0 10px;">Welcome to Xgenbox</h2>
           <p style="color: #333; font-size: 16px; font-weight: 400; margin: 0 0 10px;">Please use the following code to verify your email.</p>
           <div style="background-color: #333; color: #fff; font-size: 20px; font-weight: 500; padding: 10px 20px; border-radius: 5px; display: inline-block;">
             ${code}
@@ -36,7 +36,7 @@ exports.mailTransport =()=>
           return `
           <div style="background-color: #f5f5f5; padding: 10px; text-align: center;">
           <div style="background-color: #fff; padding: 20px; border-radius: 5px;">
-            <h2 style="color: #333; font-size: 24px; font-weight: 500; margin: 0 0 10px;">Welcome to Conteneur Connecté</h2>
+            <h2 style="color: #333; font-size: 24px; font-weight: 500; margin: 0 0 10px;">Welcome to Xgenbox</h2>
             <p style="color: #333; font-size: 16px; font-weight: 400; margin: 0 0 10px;">Please use the following code to Delete you're account.</p>
             <div style="background-color: #333; color: #fff; font-size: 20px; font-weight: 500; padding: 10px 20px; border-radius: 5px; display: inline-block;">
               ${code}

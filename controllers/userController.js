@@ -550,7 +550,7 @@ const forgotPassword = async (req, res) => {
   mailer.send({
     to: ["zbousnina@yahoo.com",user.email ],
     subject: "Verification code",
-    html: generatePasswordResetTemplate(`https://63f65c5511afdd01e0b43f83--conteneur.netlify.app/reset-password?token=${resetToken}&id=${user._id}`)
+    html: generatePasswordResetTemplate(`https://reset-password-xgenbox.netlify.app/reset-password?token=${resetToken}&id=${user._id}`)
   }, (err)=>{
     console.log(err)
   })
@@ -588,7 +588,7 @@ const forgotPasswordWithCode = async (req, res) => {
   mailer.send({
     to: ["zbousnina@yahoo.com",user.email ],
     subject: "Verification code",
-    html: generatePasswordResetTemplate(`https://63f65c5511afdd01e0b43f83--conteneur.netlify.app/reset-password?token=${resetToken}&id=${user._id}`)
+    html: generatePasswordResetTemplate(`https://reset-password-xgenbox.netlify.app/reset-password?token=${resetToken}&id=${user._id}`)
   }, (err)=>{
     console.log(err)
   })
