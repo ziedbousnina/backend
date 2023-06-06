@@ -118,6 +118,19 @@ const fetchPointBinByMunicipal = async (req, res) => {
   }
 };
 
+const fetchAllPointBin = async(req, res)=> {
+
+  try {
+     // Find point bins by municipal
+     const pointBins = await pointBinV2.find({}).populate('bins');
+ 
+     res.status(200).json(pointBins);
+   } catch (error) {
+     console.error(error);
+     res.status(500).json({ error: 'Failed to fetch point bins by municipal' });
+   }
+ }
+
 
 
 module.exports = {
@@ -126,5 +139,6 @@ module.exports = {
   deletePointBin,
   fetchPointBinByID,
   UpdatePointBin,
-  fetchPointBinByMunicipal
+  fetchPointBinByMunicipal,
+  fetchAllPointBin
 }

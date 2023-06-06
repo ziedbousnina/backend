@@ -227,6 +227,51 @@ function fetchDataAndSubscribe() {
 fetchDataAndSubscribe();
 // -------------------------------------------------------------------------------
 
+const axios = require('axios');
+
+app.post('/sendsms', (req, res) => {
+  const { msg, tel } = req.body;
+  console.log(msg, tel)
+  console.log(msg);
+  
+  const username = 'admin';
+  const password = 'expressmobidle$$2018';
+  const authHeader = `Basic Auth ${Buffer.from(`${username}:${password}`).toString('base64')}`;
+  const headers = {
+    'Content-Type': 'application/json',
+
+
+    'Authorization': authHeader,
+    
+
+  };
+const body = JSON.stringify({tel:tel, msg:msg})
+  // Make a POST request to the SMS API
+  axios.post('http://sms.expressdisplay.net/v1/sendsms', body, {
+    headers,
+  },
+  
+  )
+    .then(response => {
+      // Handle the API response
+      // You can customize this based on your requirements
+      res.json({
+        success: true,
+        message: 'SMS sent successfully',
+        data: response.data,
+      });
+    })
+    .catch(error => {
+      console.error('Error sending SMS:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to send SMS',
+      });
+    });
+});
+
+
+
 
 app.get('*', function(req, res){
   res.status(404).json({

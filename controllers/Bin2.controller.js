@@ -368,6 +368,29 @@ const FetchBinsNotInPointBinByMunicipal = async (req, res) => {
   }
 };
 
+const FetchBinsNotInPointBins = async (req, res) => {
+
+  try {
+    // Find all bin IDs present in PointBinV2
+    const pointBins = await pointBinV2.find({}).exec();
+    const binIdsInPointBin = pointBins.reduce((ids, pointBin) => {
+      return ids.concat(pointBin.bins);
+    }, []);
+
+    // Find all bins that are not in PointBinV2
+    const binsNotInPointBin = await BinModel.find({
+     
+      _id: { $nin: binIdsInPointBin },
+    }).exec();
+
+    res.status(200).json({ bins: binsNotInPointBin });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
 module.exports = 
 {
   CreateBin2,
@@ -380,5 +403,6 @@ module.exports =
   fetchAllPointBinsAndHerBinsByUserId,
   deleteBin,
   UpdateBin,
-  FetchBinsNotInPointBinByMunicipal
+  FetchBinsNotInPointBinByMunicipal,
+  FetchBinsNotInPointBins
 }
