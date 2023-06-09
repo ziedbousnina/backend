@@ -12,6 +12,7 @@ const binRoute = require('./routes/bin.route');
 const cleaningService = require('./routes/cleaningService.route');
 const PointbinRoute = require('./routes/pointBin.route');
 const site = require('./routes/Sites.route');
+const score = require('./routes/score.route');
 
 
 const morgan = require('morgan');
@@ -57,6 +58,7 @@ app.use('/api/profile', profiles);
 app.use('/api/access', access);
 app.use('/api/site', site);
 app.use('/api/bin', binRoute);
+app.use('/api/score', score);
 app.use('/api/cleaning', cleaningService);
 app.use('/api/Pointbin', PointbinRoute);
 app.use('/api/demande-municipal', demandeMunicipal);
