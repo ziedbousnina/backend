@@ -77,6 +77,62 @@ const AddProfile = async(req, res)=>{
     }
 }
 
+const EditProfile = async (req, res) => {
+    try {
+      const profile = await profileModels.findOne({ user: req.user.id });
+      if (!profile) {
+        return res.status(404).json({ error: "Profile not found" });
+      }
+  
+      const { tel, avatar, address, city, country, postalCode, bio } = req.body;
+  
+      if (tel) {
+        const telExist = await profileModels.findOne({ tel });
+        if (telExist && telExist.user.toString() !== req.user.id) {
+          return res.status(404).json({ error: "Tel already exists" });
+        }
+        profile.tel = tel;
+      }
+  
+      if (avatar) {
+        // Upload avatar and update profile
+        const result = await cloudinary.uploader.upload(avatar.path, {
+          public_id: `${req.user.id}_profile`,
+          width: 500,
+          height: 500,
+          crop: "fill",
+        });
+        profile.avatar = result.secure_url;
+      }
+  
+      if (address) {
+        profile.address = address;
+      }
+  
+      if (city) {
+        profile.city = city;
+      }
+  
+      if (country) {
+        profile.country = country;
+      }
+  
+      if (postalCode) {
+        profile.postalCode = postalCode;
+      }
+  
+      if (bio) {
+        profile.bio = bio;
+      }
+  
+      const updatedProfile = await profile.save();
+  
+      res.status(200).json(updatedProfile);
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
+  
 // const AddProfile = async(req, res)=>{
    
 //     const {isValid, errors} = profileInputValidator(req.body)
@@ -248,6 +304,7 @@ module.exports = {
     FindAllProfile,
     AddProfile,
     findSingleProfile,
-    DeleteProfile
+    DeleteProfile,
+    EditProfile
 }
 

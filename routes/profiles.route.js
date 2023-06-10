@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport');
-const { AddProfile, FindAllProfile, findSingleProfile, DeleteProfile } = require('../controllers/profiles.controllers');
+const { AddProfile, FindAllProfile, findSingleProfile, DeleteProfile, EditProfile } = require('../controllers/profiles.controllers');
 const { ROLES, isRole } = require('../security/Rolemiddleware');
 const router = express.Router()
 const multer = require('multer');
@@ -30,6 +30,7 @@ router.route('/',uploads.single('avatar')).post(passport.authenticate('jwt', {se
 
 //find All profile
 router.route('/profiles').get( passport.authenticate('jwt', {session: false}),isRole(ROLES.ADMIN), FindAllProfile )
+router.route('/EditProfile',uploads.single('avatar')).put( passport.authenticate('jwt', {session: false}), EditProfile )
 
 
 // get single Profile
