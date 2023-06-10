@@ -97,11 +97,33 @@ const generateRechargeNumber = () => {
   return rechargeNumber.toString();
 };
 
+const createScore = async (req, res) => {
+  const  userId  = req.user.id; // Assuming userId is provided in the request body
+
+  try {
+    // Check if a score already exists for the user
+    const existingScore = await scoreModel.findOne({ user: userId });
+
+    if (existingScore) {
+      return res.status(400).json({ message: 'Score already exists for the user.' });
+    }
+
+    // Create a new score if it doesn't exist
+    const newScore = await scoreModel.create({ user: userId });
+
+    res.status(201).json(newScore);
+  } catch (error) {
+    console.error('Error creating score:', error);
+    res.status(500).json({ message: 'Failed to create score.' });
+  }
+};
+
 
 module.exports = 
 {
 
   AddPointScore,
-  findScore
+  findScore,
+  createScore
 
 }
