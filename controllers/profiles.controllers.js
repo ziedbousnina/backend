@@ -78,6 +78,7 @@ const AddProfile = async(req, res)=>{
 }
 
 const EditProfile = async (req, res) => {
+    console.log(req.body)
     try {
       const profile = await profileModels.findOne({ user: req.user.id });
       if (!profile) {

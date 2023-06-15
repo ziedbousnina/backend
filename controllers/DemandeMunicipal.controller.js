@@ -101,6 +101,23 @@ const findAllDemande = async(req, res)=>{
  }
 }
 
+const findMunicipalByID = async (req, res) => {
+  const { municipalID } = req.params;
+
+  try {
+    const municipal = await DemandeMunicipalModel.findById(municipalID).populate('user');
+
+    if (!municipal) {
+      return res.status(404).json({ error: 'Municipal not found' });
+    }
+
+    res.status(200).json(municipal);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 // const findAllDemande = async (req, res) => {
 //   try {
 //     const data = await DemandeMunicipalModel.find({ status: 'in progress' })
@@ -152,5 +169,6 @@ module.exports = {
   findDemandeInProgress,
   findAllDemande,
   AcceptDemande,
-  findSingleRequest
+  findSingleRequest,
+  findMunicipalByID
 };

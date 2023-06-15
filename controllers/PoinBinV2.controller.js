@@ -20,6 +20,7 @@ const validateBinPointInput = require("../validation/PointBinValidation")
 // }
 
 const createPointBinV2 = async (req, res) => {
+  console.log(req.body)
   const { isValid, errors } = validateBinPointInput(req.body);
   try {
     if (!isValid) {
