@@ -273,7 +273,7 @@ const createQuote = async (req, res) => {
   console.log(req.body)
     try {
       
-      if (isValid) {
+      // if (isValid) {
 
         if(graphicWraps){
      
@@ -304,10 +304,10 @@ const createQuote = async (req, res) => {
     
     console.log("after save")
     res.status(201).json(newQuote);
-  }else {
-    responseSent = true;
-    return res.status(404).json(errors);
-  }
+  // }else {
+  //   responseSent = true;
+  //   return res.status(404).json(errors);
+  // }
   } catch (error) {
     res.status(500).json({ error: 'Failed to create quote' });
   }

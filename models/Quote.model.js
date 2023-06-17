@@ -4,69 +4,69 @@ const { Schema } = mongoose
 const QuoteModel = new Schema({
  name: {
     type:String,
-    required:true,
+    // required:true,
  },
   email: {  
     type:String,
-    required:true,
+    // required:true,
     
   },
   tel: {
     type:String,
-    required:true,
-    minlength:8,
-    maxlength:8
+    // required:true,
+    // minlength:8,
+    // maxlength:8
   },
   companyName: {
     type:String,
-    required:true,
+    // required:true,
 
   },
   companyWebSite: {
     type:String,
-    required:true,
+    // required:true,
 
   },
   jobTitle: {
     type:String,
-    required:true,
+    // required:true,
 
   },
   country: {
     type:String,
-    required:true,
+    // required:true,
   },
   city: {
     type:String,
-    required:true,
+    // required:true,
   },
   size: {
     type:String,
-    required:true,
+    // required:true,
   },
   quantity : {
     type:String,
-    required:true,
+    // required:true,
 
   },
   powerSupply : {
     type:String,
-    required:true,
+    // required:true,
   },
   connectivity: {
     type:String,
-    required:true,
+    // required:true,
   },
   disinfection : [
     {
       type:String,
-      required:true,
+      // required:true,
     },
   ],
   sensors: [
     {
       type:String,
-      required:true,
+      // required:true,
     }
   ],
   graphicWraps : {
