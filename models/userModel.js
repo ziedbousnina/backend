@@ -36,7 +36,8 @@ const userSchema = mongoose.Schema(
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'PointBinV2',
-                unique: true,
+                // unique: true,
+                
             }
         ],
         
