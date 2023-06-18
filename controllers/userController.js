@@ -927,6 +927,27 @@ const deblockUser = async(req, res)=>  {
 
 //   res.json(populatedUsers);
 //  }
+const getAllUserWhoHasASameAccessBin = async (req, res) => {
+  const { _id } = req.user;
+
+  const currentUser = await User.findById(_id);
+
+  const users = await User.find({
+    accessListBins: { $in: currentUser.accessListBins },
+    _id: { $ne: currentUser._id },
+  });
+
+  // Fetch profiles and scores for each user
+  const populatedUsers = await Promise.all(
+    users.map(async (user) => {
+      const profile = await profileModels.findOne({ user: user._id });
+      const score = await scoreModel.findOne({ user: user._id });
+      return { ...user.toObject(), profile, score }; // Combine user, profile, and score data
+    })
+  );
+
+  res.json(populatedUsers);
+};
 
 
 
