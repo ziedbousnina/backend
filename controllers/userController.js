@@ -26,6 +26,7 @@ const profileModels = require("../models/profile.models")
 const accessModel = require("../models/access.model");
 const pointBinV2 = require('../models/PointBinV2.Model.js');
 const FeedbackModel = require('../models/Feedback.Model.js');
+const scoreModel = require('../models/score.model.js');
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -906,7 +907,27 @@ const deblockUser = async(req, res)=>  {
   }
 }
 
-const getAllUserWhoHasASameAccessBin = async(req, res)=> {
+// const getAllUserWhoHasASameAccessBin = async(req, res)=> {
+//   const { _id } = req.user;
+
+//   const currentUser = await User.findById(_id);
+
+//   const users = await User.find({
+//     accessListBins: { $in: currentUser.accessListBins },
+//     _id: { $ne: currentUser._id },
+//   });
+
+  
+//   const populatedUsers = await Promise.all(
+//     users.map(async (user) => {
+//       const profile = await profileModels.findOne({ user: user._id });
+//       return { ...user.toObject(), profile };
+//     })
+//   );
+
+//   res.json(populatedUsers);
+//  }
+const getAllUserWhoHasASameAccessBin = async (req, res) => {
   const { _id } = req.user;
 
   const currentUser = await User.findById(_id);
@@ -916,16 +937,19 @@ const getAllUserWhoHasASameAccessBin = async(req, res)=> {
     _id: { $ne: currentUser._id },
   });
 
-  // Fetch profiles for each user
+  // Fetch profiles and scores for each user
   const populatedUsers = await Promise.all(
     users.map(async (user) => {
       const profile = await profileModels.findOne({ user: user._id });
-      return { ...user.toObject(), profile }; // Combine user and profile data
+      const score = await scoreModel.findOne({ user: user._id });
+      return { ...user.toObject(), profile, score }; // Combine user, profile, and score data
     })
   );
 
   res.json(populatedUsers);
- }
+};
+
+
 
 const reportUser = async (req, res)=> {
   const { id } = req.params;
