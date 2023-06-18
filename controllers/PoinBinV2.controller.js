@@ -90,6 +90,7 @@ const fetchPointBinByID = async (req, res) => {
 
 const UpdatePointBin = async (req, res) => {
   const id = req.params.id; // Assuming the bin ID is passed as a parameter
+  console.log(req.body)
 
   try {
     
