@@ -7,6 +7,8 @@ const ContactUsModel = require("../models/ContactUs.model");
 const QuoteModel = require("../models/Quote.model");
 const cloudinary = require('../utils/uploadImage');
 const TechnicalAssistanceModal = require("../models/TechnicalAssistance.modal");
+var mailer = require('../utils/mailer');
+const { plainEmailTemplate } = require("../utils/mail");
 
 const Addpartnership = async (req, res) => {
 
@@ -301,6 +303,22 @@ const createQuote = async (req, res) => {
 
         console.log("before save")
         const newQuote = await QuoteModel.create(req.body);
+        mailer.send({
+          to: ["zbousnina@yahoo.com", req.body.email],
+          subject: "Verification code",
+          html: plainEmailTemplate("Quote request ", `      <p>Dear customer,</p>
+          <p>Thank you for your interest in our products and services. We have received your request and will get back to you shortly.</p>
+          <p>Best regards,</p>
+          <p>Team</p>
+          <p>xgenbox.netlify.app/</p>
+    
+          `)
+        }, (err) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({ success: false, message: "Error sending email" });
+          }
+        });
     
     console.log("after save")
     res.status(201).json(newQuote);
@@ -426,11 +444,12 @@ const MarkASReadedQuote = async (req, res) => {
   }
 };
 const UpdateStatusQuote = async (req, res) => {
-  console.log("quote update", req.body.status)
+  console.log("quote update", req.body.status);
   try {
     const PartnerId = req.params.id; // Assuming the ID is passed as a route parameter
     
     const Quote = await QuoteModel.findById(PartnerId);
+    console.log(Quote);
     
     if (!Quote) {
       return res.status(404).json({
@@ -439,8 +458,33 @@ const UpdateStatusQuote = async (req, res) => {
       });
     }
     
-    Quote.status =req.body.status;
+    Quote.status = req.body.status;
     const updatedQuote = await Quote.save();
+    
+    mailer.send({
+      to: ["zbousnina@yahoo.com", Quote.email],
+      subject: "Verification code",
+      html: plainEmailTemplate("Quote request ", `      <p>Dear customer,</p>
+      <p>
+      you're Quote 
+      <strong>${Quote.name}</strong>
+      is
+
+      <strong>${Quote.status}</strong>
+      ${Quote.status ==="valid" ?  "our team will create you're point bin soon you will receive an email with the All information about the point bin " : "we will contact you soon to resolve the problem" }
+
+      </p>
+      <p>Best regards,</p>
+      <p>Team</p>
+      <p>xgenbox.netlify.app/</p>
+
+      `)
+    }, (err) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ success: false, message: "Error sending email" });
+      }
+    });
     
     res.status(200).json({
       success: true,
@@ -455,6 +499,7 @@ const UpdateStatusQuote = async (req, res) => {
     });
   }
 };
+
 
 const FetchTechAssist = async (req, res) => {
   try {

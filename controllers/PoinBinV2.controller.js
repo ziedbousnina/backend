@@ -1,7 +1,9 @@
 
 const pointBinV2 = require("../models/PointBinV2.Model");
 const validateBinPointInput = require("../validation/PointBinValidation")
-
+var mailer = require('../utils/mailer');
+const { plainEmailTemplate } = require("../utils/mail");
+const QuoteModel = require("../models/Quote.model");
 
 // const createPointBinV2 = async(req, res)=> {
 //   const { isValid, errors } = validateBinPointInput(req.body);
@@ -30,10 +32,43 @@ const createPointBinV2 = async (req, res) => {
 
       // Check if the bin already exists in any other point bin
       const existingPointBin = await pointBinV2.findOne({ bins });
+      const quoteReq = await QuoteModel.findById(req.body.quoteDemande)
+      console.log(quoteReq)
       if (existingPointBin) {
         res.status(400).json({ success: false, error: 'Bin already in use' });
       } else {
         const pointBin1 = await pointBinV2.create(req.body);
+        
+        mailer.send(
+          {
+            to: ['zbousnina@yahoo.com', quoteReq.email],
+            subject: 'Point Bin xgenbox',
+            html: plainEmailTemplate(
+              'Point bin   ',
+              `
+              <p>Dear customer,</p>
+              
+              <p>Best regards,</p>
+              <p>Team</p>
+              <p>xgenbox.netlify.app/</p>
+    
+              <h2>Point Bin Information:</h2>
+              <p>Address: ${pointBin1.address}</p>
+              <p>Latitude: ${pointBin1.lat}</p>
+              <p>Longitude: ${pointBin1.long}</p>
+              <p>Governorate: ${pointBin1.governorate}</p>
+              <p>Municipality: ${pointBin1.municipale}</p>
+              <p>Code: ${pointBin1.code}</p>
+              `
+            ),
+          },
+          (err) => {
+            if (err) {
+              console.log(err);
+              return res.status(500).json({ success: false, message: 'Error sending email' });
+            }
+          }
+        );
         res
           .status(201)
           .json({ success: true, message: 'PointBin created successfully', pointBin1 });
